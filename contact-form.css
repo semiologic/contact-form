@@ -1,0 +1,62 @@
+/*
+ * Contact Form Skin Sample
+ * ------------------------
+ * To customize the way contact forms display on your site, rename this file as skin.css and edit at will.
+ */
+
+
+div.contact_form
+{
+	width: 360px;
+	margin: 0px auto;
+}
+
+.contact_form div
+{
+	text-align: left;
+	margin: .5em 0px;
+}
+
+.contact_form div.cf_send
+{
+	text-align: right;
+}
+
+.contact_form .cf_field
+{
+	width: 90%;
+}
+
+.contact_form textarea.cf_field
+{
+	height: 160px;
+	overflow-y: visible;
+}
+
+
+li.contact_form /* = sidebar widget */
+{
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+li.contact_form textarea.cf_field
+{
+	height: 120px;
+}
+
+.cf_success
+{
+	border: solid 1px ForestGreen;
+	background: #eeffee;
+	color: ForestGreen;
+	padding: 1em;
+}
+
+.cf_error
+{
+	border: solid 1px FireBrick;
+	background: #ffeeee;
+	color: FireBrick;
+	padding: 1em;
+}
