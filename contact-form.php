@@ -5,7 +5,7 @@ Plugin URI: http://www.semiologic.com/software/publishing/contact-form/
 Description: Contact form widgets for WordPress, with built-in spam protection and akismet integration
 Author: Denis de Bernardy
 Version: 1.0.2
-Author URI: http://www.semiologic.com
+Author URI: http://www.getsemiologic.com
 Update Service: http://version.semiologic.com/wordpress
 Update Tag: contact_form
 Update Package: http://www.semiologic.com/media/publishing/contact-form/contact-form/contact-form.zip
