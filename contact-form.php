@@ -244,7 +244,7 @@ class contact_form
 			
 			foreach ( array('name', 'email', 'phone', 'subject', 'message') as $var )
 			{
-				$$var = stripslashes($_POST['cf_' . $var]);
+				$$var = strip_tags(stripslashes($_POST['cf_' . $var]));
 			}
 			
 			$headers = 'From: "' . $name . '" <' . $email . '>';
