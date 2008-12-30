@@ -376,7 +376,7 @@ class contact_form
 			$comment['user_ip'] = preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] );
 			$comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 			$comment['referrer'] = $_SERVER['HTTP_REFERER'];
-			$comment['blog'] = get_option('home');
+			$comment['blog'] = user_trailingslashit(get_option('home'));
 
 			$ignore = array( 'HTTP_COOKIE' );
 
