@@ -2,28 +2,6 @@
 class contact_form_admin
 {
 	#
-	# init()
-	#
-	
-	function init()
-	{
-		add_filter('sem_api_key_protected', array('contact_form_admin', 'sem_api_key_protected'));
-	} # init()
-	
-		
-	#
-	# sem_api_key_protected()
-	#
-	
-	function sem_api_key_protected($array)
-	{
-		$array[] = 'http://www.semiologic.com/media/software/publishing/contact-form/contact-form.zip';
-		
-		return $array;
-	} # sem_api_key_protected()
-	
-	
-	#
 	# widget_control()
 	#
 	
@@ -195,6 +173,4 @@ class contact_form_admin
 			);
 	} # get_captions()
 } # contact_form_admin
-
-contact_form_admin::init();
 ?>
