@@ -6,7 +6,7 @@ Description: Contact form widgets for WordPress, with built-in spam protection a
 Version: 1.0.4 alpha
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
-Update Package: https://members.semiologic.com/media/plugins/contact-form.zip
+Update Package: https://members.semiologic.com/media/plugins/contact-form/contact-form.zip
 */
 
 /*
