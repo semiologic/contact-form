@@ -2,7 +2,7 @@
 /*
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/publishing/contact-form/
-Description: Contact form widgets for WordPress, with built-in spam protection and akismet integration
+Description: Contact form widgets for WordPress, with built-in spam protection in addition to WP Hashcash and akismet integration
 Version: 1.1 alpha
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
@@ -28,6 +28,7 @@ if ( !is_admin() ) {
 	add_action('init', array('contact_form', 'send_message'));
 	
 	add_action('wp_print_styles', array('contact_form', 'add_css'));
+	add_action('wp_head', array('contact_form', 'hashcash'), 20);
 	
 	add_filter('contact_form_validate', array('contact_form', 'akismet'));
 }
@@ -96,8 +97,8 @@ class contact_form {
 			$form = '<div style="border: solid 1px red; background: #ffeeee; color: #cc0000; font-weight: bold; padding: 10px;">'
 			. 'Please configure the contact form under Design / Widgets'
 			. '</div>' . "\n";
-		} elseif ( $_POST['cf_number'] == $number
-			&& $GLOBALS['cf_status'][$_POST['cf_number']] == 'success'
+		} elseif ( intval($_POST['cf_number']) == $number
+			&& $GLOBALS['cf_status'][intval($_POST['cf_number'])] == 'success'
 			) {
 			$form = '<div class="cf_success">'
 				. wpautop($options['captions']['success_message'])
@@ -106,12 +107,14 @@ class contact_form {
 			$form = '<form method="post" action="">' . "\n"
 				. '<input type="hidden" name="cf_number" value="' . intval($number) . '">' . "\n";
 
-			$errorCode = $GLOBALS['cf_status'][$_POST['cf_number']];
-			
-			if ( $_POST['cf_number'] == $number && $errorCode ) {
-				$form .= '<div class="cf_error">'
-					. $options['captions'][$errorCode]
-					. '</div>' . "\n";
+			if ( intval($_POST['cf_number']) == $number ) {
+				$errorCode = $GLOBALS['cf_status'][intval($_POST['cf_number'])];
+
+				if ( $errorCode ) {
+					$form .= '<div class="cf_error">'
+						. $options['captions'][$errorCode]
+						. '</div>' . "\n";
+				}
 			}
 			
 			foreach ( array(
@@ -177,6 +180,10 @@ class contact_form {
 					break;
 				}
 			}
+			
+			if ( function_exists('wphc_option') ) {
+				$form .= '<input type="hidden" name="wphc_value" value="" />' . "\n";
+			}
 
 			$form .= '</form>' . "\n";
 		}
@@ -208,8 +215,6 @@ class contact_form {
 				COOKIEPATH,
 				COOKIE_DOMAIN
 				);
-			
-			$_POST['cf_number'] = 0;
 
 			return;
 		}
@@ -219,7 +224,7 @@ class contact_form {
 			
 			$_POST['cf_number'] = intval($_POST['cf_number']);
 
-			$number = $_POST['cf_number'];
+			$number = intval($_POST['cf_number']);
 			
 			$options = $options[$number];
 			
@@ -297,9 +302,16 @@ class contact_form {
 			} # foreach
 		}
 		
+		# filter through hashcash
+		if ( $ok ) {
+			$wphc_options = wphc_option();
+			$ok = in_array($_POST["wphc_value"], $wphc_options['key']);
+		}
+		
+		# filter throgh akismet
 		if ( $ok ) {
 			# create a fake comment
-			$comment['comment_post_ID'] = 0;
+			$comment['comment_post_ID'] = intval($_POST['cf_number']);
 			$comment['comment_author'] = stripslashes($_POST['cf_name']);
 			$comment['comment_author_email'] = stripslashes($_POST['cf_email']);
 			$comment['comment_author_url'] = '';
@@ -312,11 +324,11 @@ class contact_form {
 			$args['comment'] =& $comment;
 			
 			# comment spam filters can now filter this the usual way with an appropriate method
-			apply_filters('contact_form_validate', $args);
+			$args = apply_filters('contact_form_validate', $args);
 		}
-				
+		
 		if ( !$ok ) {
-			$GLOBALS['cf_status'][$_POST['cf_number']] = $status;
+			$GLOBALS['cf_status'][intval($_POST['cf_number'])] = $status;
 		}
 		
 		return $ok;
@@ -326,13 +338,13 @@ class contact_form {
 	/**
 	 * akismet()
 	 *
-	 * @param array $args
+	 * @param array $args Status and fake WP comment
 	 * @return void
 	 **/
 
 	function akismet($args) {
 		if ( !$args['ok']) {
-			return false;
+			return $args;
 		} else {
 			$comment =& $args['comment'];
 		}
@@ -365,6 +377,48 @@ class contact_form {
 		
 		return $args;
 	} # akismet()
+	
+	
+	/**
+	 * hashcash()
+	 *
+	 * @return void
+	 **/
+
+	function hashcash() {
+		if ( !function_exists('wphc_option') )
+			return;
+		
+		echo "<script type=\"text/javascript\"><!--\n";
+		
+		if ( !is_singular() ) {
+			echo <<<EOS
+function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+EOS;
+			echo  wphc_getjs() . "\n";
+		}
+		echo <<<EOS
+addLoadEvent(function() {
+	var value = wphc();
+	for ( var i = 0; i < document.getElementsByName('wphc_value').length; i++ ) {
+		document.getElementsByName('wphc_value')[i].value=value;
+	}
+});
+EOS;
+		echo "//--></script>\n";
+	} # hashcash()
 	
 	
 	/**
