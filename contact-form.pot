@@ -1,0 +1,134 @@
+#  Contact Form pot file.
+# Copyright (C) 2009 Mesoconcepts <http://www.mesoconcepts.com>
+# This file is distributed under the same license as the  Contact Form package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  1.1 alpha\n"
+"Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
+"POT-Creation-Date: 2009-02-26 16:01+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: contact-form-admin.php:79
+msgid "Configuration"
+msgstr ""
+
+#: contact-form-admin.php:85
+msgid "Title"
+msgstr ""
+
+#: contact-form-admin.php:97 contact-form.php:405
+msgid "Your Email"
+msgstr ""
+
+#: contact-form-admin.php:109
+msgid "Captions"
+msgstr ""
+
+#: contact-form-admin.php:157
+msgid "Name"
+msgstr ""
+
+#: contact-form-admin.php:158
+msgid "Email"
+msgstr ""
+
+#: contact-form-admin.php:159
+msgid "Phone Number"
+msgstr ""
+
+#: contact-form-admin.php:160 contact-form.php:407
+msgid "Subject"
+msgstr ""
+
+#: contact-form-admin.php:161 contact-form.php:408
+msgid "Message"
+msgstr ""
+
+#: contact-form-admin.php:162
+msgid "Receive a copy"
+msgstr ""
+
+#: contact-form-admin.php:163 contact-form.php:410
+msgid "Send Email"
+msgstr ""
+
+#: contact-form-admin.php:164
+msgid "Thank you"
+msgstr ""
+
+#: contact-form-admin.php:165
+msgid "Invalid Email"
+msgstr ""
+
+#: contact-form-admin.php:166
+msgid "Missing Field"
+msgstr ""
+
+#: contact-form-admin.php:167
+msgid "Spam Caught"
+msgstr ""
+
+#: contact-form.php:47
+msgid "A contact form with spam protection, including Akismet integration."
+msgstr ""
+
+#: contact-form.php:56 contact-form.php:57 contact-form.php:63
+#: contact-form.php:64
+msgid "Contact Form"
+msgstr ""
+
+#: contact-form.php:232 contact-form.php:235
+msgid "From:"
+msgstr ""
+
+#: contact-form.php:234
+msgid "Site:"
+msgstr ""
+
+#: contact-form.php:236
+msgid "Email:"
+msgstr ""
+
+#: contact-form.php:237
+msgid "Phone:"
+msgstr ""
+
+#: contact-form.php:401
+msgid "Contact Us"
+msgstr ""
+
+#: contact-form.php:404
+msgid "Your Name"
+msgstr ""
+
+#: contact-form.php:406
+msgid "Your Phone Number (optional)"
+msgstr ""
+
+#: contact-form.php:409
+msgid "Receive a carbon copy of this email"
+msgstr ""
+
+#: contact-form.php:411
+msgid "Thank you for your email."
+msgstr ""
+
+#: contact-form.php:412
+msgid "Please enter a valid email"
+msgstr ""
+
+#: contact-form.php:413
+msgid "Please fill in all of the required fields"
+msgstr ""
+
+#: contact-form.php:414
+msgid "Sorry... Your message has been caught as spam and was not sent"
+msgstr ""

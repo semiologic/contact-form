@@ -1,24 +1,30 @@
 <?php
-class contact_form_admin
-{
-	#
-	# widget_control()
-	#
-	
-	function widget_control($widget_args)
-	{
+/**
+ * contact_form_admin
+ *
+ * @package Contact Form
+ **/
+
+class contact_form_admin {
+	/**
+	 * widget_control()
+	 *
+	 * @param array $widget_args Widget args
+	 * @return void
+	 **/
+
+	function widget_control($widget_args) {
 		global $wp_registered_widgets;
 		static $updated = false;
-
+		
 		if ( is_numeric($widget_args) )
 			$widget_args = array( 'number' => $widget_args );
 		$widget_args = wp_parse_args( $widget_args, array( 'number' => -1 ) );
 		extract( $widget_args, EXTR_SKIP ); // extract number
-
+		
 		$options = contact_form::get_options();
-
-		if ( !$updated && !empty($_POST['sidebar']) )
-		{
+		
+		if ( !$updated && !empty($_POST['sidebar']) ) {
 			$sidebar = (string) $_POST['sidebar'];
 
 			$sidebars_widgets = wp_get_sidebars_widgets();
@@ -28,12 +34,10 @@ class contact_form_admin
 			else
 				$this_sidebar = array();
 
-			foreach ( $this_sidebar as $_widget_id )
-			{
+			foreach ( $this_sidebar as $_widget_id ) {
 				if ( array('contact_form', 'display_widget') == $wp_registered_widgets[$_widget_id]['callback']
 					&& isset($wp_registered_widgets[$_widget_id]['params'][0]['number'])
-					)
-				{
+				) {
 					$widget_number = $wp_registered_widgets[$_widget_id]['params'][0]['number'];
 					if ( !in_array( "contact_form-$widget_number", $_POST['widget-id'] ) ) // the widget has been removed.
 						unset($options[$widget_number]);
@@ -44,19 +48,14 @@ class contact_form_admin
 				$title = trim(stripslashes($opt['title']));
 				$email = trim(stripslashes($opt['email']));
 
-				if ( !contact_form::is_email($email) )
-				{
+				if ( !contact_form::is_email($email) ) {
 					$email = get_option('admin_email');
 				}
 				
-				foreach ( array_keys( contact_form_admin::get_captions() ) as $var )
-				{
-					if ( !current_user_can('unfiltered_html') )
-					{
+				foreach ( array_keys( contact_form_admin::get_captions() ) as $var ) {
+					if ( !current_user_can('unfiltered_html') ) {
 						$captions[$var] = stripslashes(wp_filter_post_kses($opt['captions'][$var]));
-					}
-					else
-					{
+					} else {
 						$captions[$var] = stripslashes($opt['captions'][$var]);
 					}
 				}
@@ -68,25 +67,22 @@ class contact_form_admin
 			$updated = true;
 		}
 
-		if ( -1 == $number )
-		{
+		if ( -1 == $number ) {
 			$ops = contact_form::default_options();
 			$number = '%i%';
-		}
-		else
-		{
+		} else {
 			$ops = $options[$number];
 		}
 		
 		extract($ops);
 		
-		echo '<h3>' . 'Configuration' . '</h3>' . "\n";
+		echo '<h3>' . __('Configuration', 'contact-form') . '</h3>' . "\n";
 		
 		echo '<table style="width: 460px;">' . "\n";
 		
 		echo '<tr valign="top">' . "\n"
 			. '<th scope="row" style="width: 100px;">'
-			. 'Title'
+			. __('Title', 'contact-form')
 			. '</th>' . "\n"
 			. '<td>'
 			.'<input type="text" size="20" class="widefat"'
@@ -98,7 +94,7 @@ class contact_form_admin
 		
 		echo '<tr valign="top">' . "\n"
 			. '<th scope="row" style="width: 100px;">'
-			. 'Your Email'
+			. __('Your Email', 'contact-form')
 			. '</th>' . "\n"
 			. '<td>'
 			.'<input type="text" size="20" class="widefat"'
@@ -110,14 +106,12 @@ class contact_form_admin
 		
 		echo '</table>' . "\n";
 		
-		echo '<h3>' . 'Captions' . '</h3>' . "\n";
+		echo '<h3>' . __('Captions', 'contact-form') . '</h3>' . "\n";
 		
 		echo '<table style="width: 460px;">' . "\n";
 		
-		foreach ( contact_form_admin::get_captions() as $var => $caption )
-		{
-			switch ( $var )
-			{
+		foreach ( contact_form_admin::get_captions() as $var => $caption ) {
+			switch ( $var ) {
 			case 'success_message':
 				echo '<tr valign="top">' . "\n"
 					. '<th scope="row" style="width: 100px;">'
@@ -152,24 +146,25 @@ class contact_form_admin
 	} # widget_control()
 	
 	
-	#
-	# get_captions()
-	#
-	
-	function get_captions()
-	{
+	/**
+	 * get_captions()
+	 *
+	 * @return void
+	 **/
+
+	function get_captions() {
 		return array(
-			'name' => 'Name',
-			'email' => 'Email',
-			'phone' => 'Phone Number',
-			'subject' => 'Subject',
-			'message' => 'Message',
-			'cc' => 'Receive a copy',
-			'send' => 'Send Email',
-			'success_message' => 'Thank you',
-			'invalid_email' => 'Invalid Email',
-			'required_field' => 'Required Field',
-			'spam_caught' => 'Spam Caught',
+			'name' => __('Name', 'contact-form'),
+			'email' => __('Email', 'contact-form'),
+			'phone' => __('Phone Number', 'contact-form'),
+			'subject' => __('Subject', 'contact-form'),
+			'message' => __('Message', 'contact-form'),
+			'cc' => __('Receive a copy', 'contact-form'),
+			'send' => __('Send Email', 'contact-form'),
+			'success_message' => __('Thank you', 'contact-form'),
+			'invalid_email' => __('Invalid Email', 'contact-form'),
+			'required_field' => __('Missing Field', 'contact-form'),
+			'spam_caught' => __('Spam Caught', 'contact-form'),
 			);
 	} # get_captions()
 } # contact_form_admin
