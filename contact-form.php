@@ -95,7 +95,7 @@ class contact_form {
 		
 		if ( !$options['email'] ) {
 			$form = '<div style="border: solid 1px red; background: #ffeeee; color: #cc0000; font-weight: bold; padding: 10px;">'
-			. 'Please configure the contact form under Design / Widgets'
+			. __('Please configure the contact form under Design / Widgets', 'contact-form')
 			. '</div>' . "\n";
 		} elseif ( intval($_POST['cf_number']) == $number
 			&& $GLOBALS['cf_status'][intval($_POST['cf_number'])] == 'success'
@@ -234,12 +234,15 @@ class contact_form {
 				$$var = strip_tags(stripslashes($_POST['cf_' . $var]));
 			}
 			
-			$headers = __('From:') . ' "' . $name . '" <' . $email . '>';
+			$headers = __('From:', 'contact-form') . ' "' . $name . '" <' . $email . '>';
 			
-			$message = __('Site:') . ' ' . get_option('blogname') . "\n"
-				. __('From:') . ' ' . $name . "\n"
-				. __('Email:') . ' ' . $email . "\n"
-				. __('Phone:') . ' '. $phone . "\n"
+			$message = __('Site:', 'contact-form') . ' ' . get_option('blogname') . "\n"
+				. __('From:', 'contact-form') . ' ' . $name . "\n"
+				. __('Email:', 'contact-form') . ' ' . $email . "\n"
+				. ( $phone
+					? ( __('Phone:', 'contact-form') . ' '. $phone . "\n" )
+					: ''
+					)
 				. "\n"
 				. $message;
 			
