@@ -1,4 +1,5 @@
-div.contact_form {
+#main div.contact_form,
+#content div.contact_form {
 	width: 360px;
 	margin: 0px auto;
 }
@@ -7,31 +8,31 @@ div.contact_form {
 	width: auto;
 }
 
-.contact_form div {
+div.cf_field {
 	text-align: left;
 	margin: .5em 0px;
 }
 
-.contact_form div.cf_send {
-	text-align: right;
+div.cf_send {
+	text-align: center;
 }
 
-.contact_form .cf_field {
-	width: 90%;
+input.cf_field {
+	width: 95%;
 }
 
-.contact_form textarea.cf_field {
+textarea.cf_field {
+	width: 96%;
 	height: 160px;
 	overflow-y: visible;
 }
 
-
-li.contact_form /* = sidebar widget */ {
+.sidebar .contact_form /* = sidebar widget */ {
 	margin-left: 0px;
 	margin-right: 0px;
 }
 
-li.contact_form textarea.cf_field {
+.sidebar textarea.cf_field {
 	height: 120px;
 }
 

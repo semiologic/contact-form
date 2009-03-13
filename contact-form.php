@@ -133,7 +133,7 @@ class contact_form {
 				case 'name':
 				case 'email':
 				case 'subject':
-					$form .= '<div class="cf_' . $var . '">' . "\n"
+					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
 						. '<label>'
 						. $options['captions'][$var] . '<br />' . "\n"
 						. '<input type="text" class="cf_field"'
@@ -144,7 +144,7 @@ class contact_form {
 						. '</div>' . "\n";
 					break;
 				case 'message':
-					$form .= '<div class="cf_' . $var . '">' . "\n"
+					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
 						. '<label>'
 						. $options['captions'][$var] . '<br />' . "\n"
 						. '<textarea class="cf_field"'
@@ -156,7 +156,7 @@ class contact_form {
 						. '</div>' . "\n";
 					break;
 				case 'cc':
-					$form .= '<div class="cf_' . $var . '">' . "\n"
+					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
 						. '<label>'
 						. '<input type="checkbox" class="cf_checkbox"'
 							. ' name="cf_' . $var . '"'
@@ -170,7 +170,7 @@ class contact_form {
 						.'</div>' . "\n";
 					break;
 				case 'send':
-					$form .= '<div class="cf_' . $var . '">' . "\n"
+					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
 						. '<label>'
 						. '<input type="submit" class="submit"'
 							. ' value="' . htmlspecialchars(stripslashes($options['captions'][$var])) . '"'
@@ -187,7 +187,7 @@ class contact_form {
 
 			$form .= '</form>' . "\n";
 		}
-				
+		#dump(htmlspecialchars($args['before_title'] . $options['title'] . $args['after_title']));
 		echo $args['before_widget'] . "\n"
 			. ( $options['title']
 				? ( $args['before_title'] . $options['title'] . $args['after_title'] . "\n" )
@@ -503,7 +503,7 @@ EOS;
 	function new_widget() {
 		$o = contact_form::get_options();
 		$k = time();
-		do $k++; while ( isset($o[$k]) );
+		while ( isset($o[$k]) ) $k++;
 		$o[$k] = contact_form::default_options();
 		
 		update_option('contact_form_widgets', $o);
@@ -527,7 +527,15 @@ EOS;
 } # contact_form
 
 
-if ( is_admin() ) {
+/**
+ * contact_form_admin()
+ *
+ * @return void
+ **/
+
+function contact_form_admin() {
 	include dirname(__FILE__) . '/contact-form-admin.php';
-}
+} # contact_form_admin()
+
+add_action('load-widgets.php', 'contact_form_admin');
 ?>
