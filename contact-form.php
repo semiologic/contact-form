@@ -519,8 +519,8 @@ EOS;
 	 **/
 	
 	function add_css() {
-		$folder = plugins_url() . '/' . basename(dirname(__FILE__));
-		$css = $folder . '/css/contact-form.css';
+		$folder = plugin_dir_url(__FILE__);
+		$css = $folder . 'css/contact-form.css';
 		
 		wp_enqueue_style('contact_form', $css, null, '1.1');
 	} # add_css()
