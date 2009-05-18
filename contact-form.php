@@ -306,7 +306,7 @@ class contact_form {
 		}
 		
 		# filter through hashcash
-		if ( $ok ) {
+		if ( $ok && function_exists('wphc_option') ) {
 			$wphc_options = wphc_option();
 			$ok = in_array($_POST["wphc_value"], $wphc_options['key']);
 		}
