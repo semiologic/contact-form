@@ -172,7 +172,7 @@ class contact_form {
 				case 'send':
 					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
 						. '<label>'
-						. '<input type="submit" class="submit"'
+						. '<input type="submit" class="button submit"'
 							. ' value="' . htmlspecialchars(stripslashes($options['captions'][$var])) . '"'
 							. ' />'
 						. '</label>'
