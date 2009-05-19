@@ -8,6 +8,10 @@ Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 */
 
+
+load_plugin_textdomain('contact-form', null, dirname(__FILE__) . '/lang');
+
+
 /*
 Terms of use
 ------------
