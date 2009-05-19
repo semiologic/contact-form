@@ -392,10 +392,24 @@ class contact_form {
 		if ( !function_exists('wphc_option') )
 			return;
 		
-		echo "<script type=\"text/javascript\"><!--\n";
+		global $wp_query;
 		
-		if ( !is_singular() ) {
-			echo <<<EOS
+		$hc_js = wphc_getjs();
+		$hc_enable = <<<EOS
+
+addLoadEvent(function() {
+	var value = wphc();
+	for ( var i = 0; i < document.getElementsByName('wphc_value').length; i++ ) {
+		document.getElementsByName('wphc_value')[i].value=value;
+	}
+});
+
+EOS;
+
+		echo <<<EOS
+
+<script type="text/javascript">
+<!--
 function addLoadEvent(func) {
   var oldonload = window.onload;
   if (typeof window.onload != 'function') {
@@ -409,18 +423,15 @@ function addLoadEvent(func) {
     }
   }
 }
+
+$hc_js
+
+$hc_enable
+
+//-->
+</script>
+
 EOS;
-			echo  wphc_getjs() . "\n";
-		}
-		echo <<<EOS
-addLoadEvent(function() {
-	var value = wphc();
-	for ( var i = 0; i < document.getElementsByName('wphc_value').length; i++ ) {
-		document.getElementsByName('wphc_value')[i].value=value;
-	}
-});
-EOS;
-		echo "//--></script>\n";
 	} # hashcash()
 	
 	
