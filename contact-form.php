@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with built-in spam protection in addition to WP Hashcash and akismet integration
-Version: 1.1 beta
+Version: 1.1 RC
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form-info
@@ -330,7 +330,7 @@ class contact_form extends WP_Widget {
 				'subject' => __('Subject', 'contact-form'),
 				'message' => __('Message', 'contact-form'),
 				'cc' => __('Receive a carbon copy of this email', 'contact-form'),
-				'send' => __('Send Email'),
+				'send' => __('Send Email', 'contact-form'),
 				'success_message' => __('Thank you for your email.', 'contact-form'),
 				'invalid_email' => __('Please enter a valid email', 'contact-form'),
 				'required_field' => __('Please fill in all of the required fields', 'contact-form'),
@@ -602,29 +602,4 @@ EOS;
 		return $args;
 	} # akismet()
 } # contact_form
-
-
-class contact_form_old {
-	/**
-	 * get_options()
-	 *
-	 * @return void
-	 **/
-
-	function get_options() {
-		static $o;
-		
-		if ( isset($o) && !is_admin() )
-			return $o;
-		
-		$o = get_option('contact_form_widgets');
-		
-		if ( $o === false ) {
-			$o = array();
-			update_option('contact_form_widgets', $o);
-		}
-		
-		return $o;
-	} # get_options()
-} # contact_form_old
 ?>
