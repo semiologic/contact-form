@@ -2,7 +2,7 @@
 /*
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
-Description: Contact form widgets for WordPress, with built-in spam protection in addition to WP Hashcash and akismet integration
+Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration. Combine this with the Inline Widgets plugin.
 Version: 1.1 RC
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
