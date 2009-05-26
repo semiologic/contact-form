@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.1\n"
+"Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
-"POT-Creation-Date: 2009-05-20 00:20+0200\n"
+"POT-Creation-Date: 2009-05-26 19:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,122 +16,122 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: contact-form.php:69
+#: contact-form.php:71
 msgid "A contact form with spam protection, including Akismet integration."
 msgstr ""
 
-#: contact-form.php:75
+#: contact-form.php:77
 msgid "Contact Form"
 msgstr ""
 
-#: contact-form.php:104
+#: contact-form.php:106
 msgid "Please configure the contact form under Design / Widgets"
 msgstr ""
 
-#: contact-form.php:244
+#: contact-form.php:246
 msgid "Config"
 msgstr ""
 
-#: contact-form.php:250
+#: contact-form.php:252
 msgid "Title"
 msgstr ""
 
-#: contact-form.php:262 contact-form.php:326
+#: contact-form.php:264 contact-form.php:328
 msgid "Your Email"
 msgstr ""
 
-#: contact-form.php:274
+#: contact-form.php:276
 msgid "Captions"
 msgstr ""
 
-#: contact-form.php:322
+#: contact-form.php:324
 msgid "Contact Us"
 msgstr ""
 
-#: contact-form.php:325
+#: contact-form.php:327
 msgid "Your Name"
 msgstr ""
 
-#: contact-form.php:327
+#: contact-form.php:329
 msgid "Your Phone Number (optional)"
 msgstr ""
 
-#: contact-form.php:328 contact-form.php:352
+#: contact-form.php:330 contact-form.php:354
 msgid "Subject"
 msgstr ""
 
-#: contact-form.php:329 contact-form.php:353
+#: contact-form.php:331 contact-form.php:355
 msgid "Message"
 msgstr ""
 
-#: contact-form.php:330
+#: contact-form.php:332
 msgid "Receive a carbon copy of this email"
 msgstr ""
 
-#: contact-form.php:331 contact-form.php:355
+#: contact-form.php:333 contact-form.php:357
 msgid "Send Email"
 msgstr ""
 
-#: contact-form.php:332
+#: contact-form.php:334
 msgid "Thank you for your email."
 msgstr ""
 
-#: contact-form.php:333
+#: contact-form.php:335
 msgid "Please enter a valid email"
 msgstr ""
 
-#: contact-form.php:334
+#: contact-form.php:336
 msgid "Please fill in all of the required fields"
 msgstr ""
 
-#: contact-form.php:335
+#: contact-form.php:337
 msgid "Sorry... Your message has been caught as spam and was not sent"
 msgstr ""
 
-#: contact-form.php:349
+#: contact-form.php:351
 msgid "Name"
 msgstr ""
 
-#: contact-form.php:350
+#: contact-form.php:352
 msgid "Email"
 msgstr ""
 
-#: contact-form.php:351
+#: contact-form.php:353
 msgid "Phone Number"
 msgstr ""
 
-#: contact-form.php:354
+#: contact-form.php:356
 msgid "Receive a copy"
 msgstr ""
 
-#: contact-form.php:356
+#: contact-form.php:358
 msgid "Thank you"
 msgstr ""
 
-#: contact-form.php:357
+#: contact-form.php:359
 msgid "Invalid Email"
 msgstr ""
 
-#: contact-form.php:358
+#: contact-form.php:360
 msgid "Missing Field"
 msgstr ""
 
-#: contact-form.php:359
+#: contact-form.php:361
 msgid "Spam Caught"
 msgstr ""
 
-#: contact-form.php:411 contact-form.php:414
+#: contact-form.php:413 contact-form.php:416
 msgid "From:"
 msgstr ""
 
-#: contact-form.php:413
+#: contact-form.php:415
 msgid "Site:"
 msgstr ""
 
-#: contact-form.php:415
+#: contact-form.php:417
 msgid "Email:"
 msgstr ""
 
-#: contact-form.php:417
+#: contact-form.php:419
 msgid "Phone:"
 msgstr ""
