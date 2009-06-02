@@ -41,12 +41,6 @@ if ( !is_admin() ) {
 
 add_action('widgets_init', array('contact_form', 'widgets_init'));
 
-/**
- * contact_form
- *
- * @package Contact Form
- **/
-
 class contact_form extends WP_Widget {
 	/**
 	 * widgets_init()
@@ -91,12 +85,8 @@ class contact_form extends WP_Widget {
 		$instance = wp_parse_args($instance, contact_form::defaults());
 		extract($instance, EXTR_SKIP);
 		
-		if ( is_admin() ) {
-			echo $before_widget
-				. $before_title . $email . $after_title
-				. $after_widget;
+		if ( is_admin() )
 			return;
-		}
 		
 		preg_match("/\d+$/", $widget_id, $number);
 		$number = intval(end($number));
