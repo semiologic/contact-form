@@ -278,7 +278,7 @@ class contact_form extends WP_Widget {
 					.'<textarea cols="20" rows="6" class="widefat"'
 						. ' name="' . $this->get_field_name('captions') . '['. $var . ']"'
 						. ' >'
-					. format_to_edit($captions[$var])
+					. esc_html($captions[$var])
 					. '</textarea>'
 					. '</td>' . "\n"
 					. '</tr>' . "\n";
