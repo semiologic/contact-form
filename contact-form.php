@@ -472,7 +472,7 @@ class contact_form extends WP_Widget {
 			$ok = in_array($_POST["wphc_value"], $wphc_options['key']);
 		}
 		
-		# filter throgh akismet
+		# filter through akismet
 		if ( $ok ) {
 			# create a fake comment
 			$comment['comment_post_ID'] = intval($_POST['cf_number']);
