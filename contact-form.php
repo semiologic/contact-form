@@ -243,6 +243,7 @@ class contact_form extends WP_Widget {
 			. '</th>' . "\n"
 			. '<td>'
 			.'<input type="text" size="20" class="widefat"'
+				. ' id="' . $this->get_field_id('title') . '"'
 				. ' name="' . $this->get_field_name('title') . '"'
 				. ' value="' . esc_attr($title) . '"'
 				. ' />'
