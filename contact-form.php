@@ -11,9 +11,6 @@ Domain Path: /lang
 */
 
 
-load_plugin_textdomain('contact-form', null, dirname(__FILE__) . '/lang');
-
-
 /*
 Terms of use
 ------------
@@ -22,6 +19,9 @@ This software is copyright Mesoconcepts (http://www.mesoconcepts.com), and is di
 
 http://www.mesoconcepts.com/license/
 **/
+
+
+load_plugin_textdomain('contact-form', null, dirname(__FILE__) . '/lang');
 
 
 /**
