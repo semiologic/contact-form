@@ -85,8 +85,15 @@ class contact_form extends WP_Widget {
 		$instance = wp_parse_args($instance, contact_form::defaults());
 		extract($instance, EXTR_SKIP);
 		
-		if ( is_admin() )
+		if ( is_admin() ) {
+			echo $before_widget
+				. ( $email
+					? ( $before_title . $email . $after_title )
+					: ''
+					)
+				. $after_widget;
 			return;
+		}
 		
 		preg_match("/\d+$/", $widget_id, $number);
 		$number = intval(end($number));
