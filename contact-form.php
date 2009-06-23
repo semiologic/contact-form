@@ -6,7 +6,7 @@ Description: Contact form widgets for WordPress, with WP Hashcash and akismet in
 Version: 2.0 RC
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
-Text Domain: contact-form-info
+Text Domain: contact-form
 Domain Path: /lang
 */
 
