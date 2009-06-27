@@ -43,6 +43,27 @@ add_action('widgets_init', array('contact_form', 'widgets_init'));
 
 class contact_form extends WP_Widget {
 	/**
+	 * init()
+	 *
+	 * @return void
+	 **/
+
+	function init() {
+		if ( get_option('widget_contact_form') === false ) {
+			foreach ( array(
+				'contact_form_widgets' => 'upgrade',
+				) as $ops => $method ) {
+				if ( get_option($ops) !== false ) {
+					$this->alt_option_name = $ops;
+					add_filter('option_' . $ops, array(get_class($this), $method));
+					break;
+				}
+			}
+		}
+	} # init()
+	
+	
+	/**
 	 * widgets_init()
 	 *
 	 * @return void
@@ -68,6 +89,7 @@ class contact_form extends WP_Widget {
 			'width' => 500,
 			);
 		
+		$this->init();
 		$this->WP_Widget('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
 	} # contact_form()
 	
@@ -599,5 +621,27 @@ EOS;
 		
 		return $args;
 	} # akismet()
+	
+	
+	/**
+	 * upgrade()
+	 *
+	 * @param array $ops
+	 * @return array $ops
+	 **/
+
+	function upgrade($ops) {
+		$widget_contexts = class_exists('widget_contexts')
+			? get_option('widget_contexts')
+			: false;
+		
+		foreach ( $ops as $k => $o ) {
+			if ( isset($widget_contexts['contact_form-' . $k]) ) {
+				$ops[$k]['widget_contexts'] = $widget_contexts['contact_form-' . $k];
+			}
+		}
+		
+		return $ops;
+	} # upgrade()
 } # contact_form
 ?>
