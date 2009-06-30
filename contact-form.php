@@ -538,8 +538,6 @@ class contact_form extends WP_Widget {
 		if ( !function_exists('wphc_option') )
 			return;
 		
-		global $wp_query;
-		
 		$hc_js = wphc_getjs();
 		$hc_enable = <<<EOS
 
