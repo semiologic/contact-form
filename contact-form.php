@@ -214,9 +214,11 @@ class contact_form extends WP_Widget {
 			$form .= '</form>' . "\n";
 		}
 		
+		$title = apply_filters('widget_title', $title);
+		
 		echo $before_widget . "\n"
 			. ( $title
-				? ( $before_title . apply_filters('widget_title', $title) . $after_title )
+				? ( $before_title . $title . $after_title )
 				: ''
 				)
 			. '<div style="clear: both;"></div>' . "\n"
