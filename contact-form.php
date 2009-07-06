@@ -192,7 +192,7 @@ class contact_form extends WP_Widget {
 								: ''
 								)
 							. ' />'
-						. $captions[$var] . '<br />' . "\n"
+						. '&nbsp;' . $captions[$var] . "\n"
 						. '</label>'
 						.'</div>' . "\n";
 					break;
