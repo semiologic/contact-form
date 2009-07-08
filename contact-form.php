@@ -40,6 +40,7 @@ if ( !is_admin() ) {
 }
 
 add_action('widgets_init', array('contact_form', 'widgets_init'));
+add_action('plugins_loaded', array('contact_form', 'fix_hashcash'));
 
 class contact_form extends WP_Widget {
 	/**
@@ -540,22 +541,8 @@ class contact_form extends WP_Widget {
 		if ( !function_exists('wphc_option') )
 			return;
 		
-		$hc_js = wphc_getjs();
-		$hc_enable = <<<EOS
-
-addLoadEvent(function() {
-	var value = wphc();
-	for ( var i = 0; i < document.getElementsByName('wphc_value').length; i++ ) {
-		document.getElementsByName('wphc_value')[i].value=value;
-	}
-});
-
-EOS;
-
-		echo <<<EOS
-
-<script type="text/javascript">
-<!--
+		if ( !is_singular() ) {
+			$hc_loader = <<<EOS
 function addLoadEvent(func) {
   var oldonload = window.onload;
   if (typeof window.onload != 'function') {
@@ -569,11 +556,27 @@ function addLoadEvent(func) {
     }
   }
 }
+EOS;
+			$hc_js = wphc_getjs();
+		} else {
+			$hc_loader = '';
+			$hc_js = '';
+		}
+		
+		echo <<<EOS
+
+<script type="text/javascript">
+<!--
+$hc_loader
 
 $hc_js
 
-$hc_enable
-
+addLoadEvent(function() {
+	var value = wphc();
+	for ( var i = 0; i < document.getElementsByName('wphc_value').length; i++ ) {
+		document.getElementsByName('wphc_value')[i].value=value;
+	}
+});
 //-->
 </script>
 
@@ -643,5 +646,120 @@ EOS;
 		
 		return $ops;
 	} # upgrade()
+	
+	
+	/**
+	 * fix_hashcash()
+	 *
+	 * @return void
+	 **/
+	
+	function fix_hashcash() {
+		# hashcash
+		if ( function_exists('wphc_add_commentform') && !class_exists('sem_fixes') ) {
+			add_filter('option_plugin_wp-hashcash', array('contact_form', 'hc_options'));
+			remove_action('admin_menu', 'wphc_add_options_to_admin');
+			remove_action('widgets_init', 'wphc_widget_init');
+			remove_action('comment_form', 'wphc_add_commentform');
+			remove_action('wp_head', 'wphc_posthead');
+			add_action('comment_form', array('contact_form', 'hc_add_message'));
+			add_action('wp_head', array('contact_form', 'hc_addhead'));
+			
+			if ( is_admin() )
+				remove_filter('preprocess_comment', 'wphc_check_hidden_tag');
+		}
+	} # fix_hashcash()
+	
+	
+	/**
+	 * hc_options()
+	 *
+	 * @param array $o
+	 * @return array $o
+	 **/
+	
+	function hc_options($o) {
+		if ( function_exists('akismet_init') && get_option('wordpress_api_key') ) {
+			$o['moderation'] = 'akismet';
+		} else {
+			$o['moderation'] = 'delete';
+		}
+		
+		$o['validate-ip'] = 'on';
+		$o['validate-url'] = 'on';
+		$o['logging'] = '';
+		
+		return $o;
+	} # hc_options()
+	
+	
+	/**
+	 * hc_add_message()
+	 *
+	 * @return void
+	 **/
+
+	function hc_add_message() {
+		$options = wphc_option();
+
+		switch( $options['moderation'] ) {
+		case 'delete':
+			$warning = __('Wordpress Hashcash needs javascript to work, but your browser has javascript disabled. Your comment will be deleted!', 'contact-form');
+			break;
+		case 'akismet':
+			$warning = __('Wordpress Hashcash needs javascript to work, but your browser has javascript disabled. Your comment will be queued in Akismet!', 'contact-form');
+			break;
+		case 'moderate':
+		default:
+			$warning = __('Wordpress Hashcash needs javascript to work, but your browser has javascript disabled. Your comment will be placed in moderation!', 'contact-form');
+			break;
+		}
+		
+		echo '<input type="hidden" id="wphc_value" name="wphc_value" value="" />' . "\n";
+		echo '<noscript><p><strong>' . $warning . '</stron></p></noscript>' . "\n";
+	} # hc_add_message()
+	
+	
+	/**
+	 * hc_addhead()
+	 *
+	 * @return void
+	 **/
+	
+	function hc_addhead() {
+		if ( !is_singular() )
+			return;
+		
+		$hc_js = wphc_getjs();
+
+		echo <<<EOS
+
+<script type="text/javascript">
+<!--
+function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+      }
+      func();
+    }
+  }
+}
+
+$hc_js
+
+addLoadEvent(function(){
+	if ( document.getElementById('wphc_value') )
+		document.getElementById('wphc_value').value=wphc();
+});
+//-->
+</script>
+
+EOS;
+	} # hc_addhead()
 } # contact_form
 ?>
