@@ -21,7 +21,7 @@ http://www.mesoconcepts.com/license/
 **/
 
 
-load_plugin_textdomain('contact-form', null, dirname(__FILE__) . '/lang');
+load_plugin_textdomain('contact-form', false, dirname(plugin_basename(__FILE__)) . '/lang');
 
 
 /**
@@ -84,7 +84,7 @@ class contact_form extends WP_Widget {
 	function contact_form() {
 		$widget_ops = array(
 			'classname' => 'contact_form',
-			'description' => __("A contact form with spam protection, including Akismet integration.", 'contact-form'),
+			'description' => __('A contact form with spam protection, including Akismet integration.', 'contact-form'),
 			);
 		$control_ops = array(
 			'width' => 500,
