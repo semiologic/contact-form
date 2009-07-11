@@ -2,8 +2,8 @@
 /*
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
-Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration. Combine this with the Inline Widgets plugin.
-Version: 2.0 RC
+Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
+Version: 2.0 RC2
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -84,7 +84,7 @@ class contact_form extends WP_Widget {
 	function contact_form() {
 		$widget_ops = array(
 			'classname' => 'contact_form',
-			'description' => __('A contact form with spam protection, including Akismet integration.', 'contact-form'),
+			'description' => __('A contact form, with spam counter-measures through WP Hashcash and Akismet.', 'contact-form'),
 			);
 		$control_ops = array(
 			'width' => 500,
@@ -123,7 +123,7 @@ class contact_form extends WP_Widget {
 		
 		if ( !is_email($email) ) {
 			$form = '<div style="border: solid 1px red; background: #ffeeee; color: #cc0000; font-weight: bold; padding: 10px;">'
-			. __('Please configure the contact form under Design / Widgets', 'contact-form')
+			. __('Please configure the contact form under Appearence / Widgets', 'contact-form')
 			. '</div>' . "\n";
 		} elseif ( intval($_POST['cf_number']) == $number
 			&& $GLOBALS['cf_status'][intval($_POST['cf_number'])] == 'success'
@@ -239,10 +239,11 @@ class contact_form extends WP_Widget {
 	function update($new_instance, $old_instance) {
 		$title = trim($new_instance['title']);
 		$email = trim($new_instance['email']);
-
+		
 		if ( !is_email($email) )
 			$email = get_option('admin_email');
 		
+		$captions = array();
 		foreach ( array_keys(contact_form::captions()) as $var ) {
 			if ( !current_user_can('unfiltered_html') )
 				$captions[$var] = $old_instance['captions'][$var];
@@ -262,7 +263,9 @@ class contact_form extends WP_Widget {
 	 **/
 
 	function form($instance) {
-		$instance = wp_parse_args($instance, contact_form::defaults());
+		$defaults = contact_form::defaults();
+		$instance = wp_parse_args($instance, $defaults);
+		$instance['captions'] = wp_parse_args($instance['captions'], $defaults['captions']);
 		extract($instance, EXTR_SKIP);
 		
 		echo '<h3>' . __('Config', 'contact-form') . '</h3>' . "\n";
@@ -355,9 +358,9 @@ class contact_form extends WP_Widget {
 				'cc' => __('Receive a carbon copy of this email', 'contact-form'),
 				'send' => __('Send Email', 'contact-form'),
 				'success_message' => __('Thank you for your email.', 'contact-form'),
-				'invalid_email' => __('Please enter a valid email', 'contact-form'),
-				'required_field' => __('Please fill in all of the required fields', 'contact-form'),
-				'spam_caught' => __('Sorry... Your message has been caught as spam and was not sent', 'contact-form'),
+				'invalid_email' => __('Please enter a valid email.', 'contact-form'),
+				'required_field' => __('Please fill in all of the required fields.', 'contact-form'),
+				'spam_caught' => __('Sorry... Your message has been caught as spam and was not sent.', 'contact-form'),
 				)
 			);
 	} # defaults()
@@ -396,7 +399,7 @@ class contact_form extends WP_Widget {
 		$folder = plugin_dir_url(__FILE__);
 		$css = $folder . 'css/contact-form.css';
 		
-		wp_enqueue_style('contact_form', $css, null, '1.1');
+		wp_enqueue_style('contact_form', $css, null, '2.0');
 	} # add_css()
 	
 	
@@ -427,13 +430,15 @@ class contact_form extends WP_Widget {
 			
 			$options = $options[$number];
 			
-			if ( !( $to = $options['email'] ) )
+			$to = $options['email'];
+			
+			if ( !is_email($to) )
 				return;
 			
 			foreach ( array('name', 'email', 'phone', 'subject', 'message') as $var )
 				$$var = strip_tags(stripslashes($_POST['cf_' . $var]));
 			
-			$headers = __('From:', 'contact-form') . ' "' . $name . '" <' . $email . '>';
+			$headers = 'From: "' . $name . '" <' . $email . '>';
 			
 			$message = __('Site:', 'contact-form') . ' ' . get_option('blogname') . "\n"
 				. __('From:', 'contact-form') . ' ' . $name . "\n"
