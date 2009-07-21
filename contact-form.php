@@ -123,7 +123,7 @@ class contact_form extends WP_Widget {
 		
 		if ( !is_email($email) ) {
 			$form = '<div style="border: solid 1px red; background: #ffeeee; color: #cc0000; font-weight: bold; padding: 10px;">'
-			. __('Please configure the contact form under Appearence / Widgets', 'contact-form')
+			. __('Please configure this contact form under Appearence / Widgets', 'contact-form')
 			. '</div>' . "\n";
 		} elseif ( intval($_POST['cf_number']) == $number
 			&& $GLOBALS['cf_status'][intval($_POST['cf_number'])] == 'success'
@@ -132,7 +132,8 @@ class contact_form extends WP_Widget {
 				. wpautop($captions['success_message'])
 				. '</div>' . "\n";
 		} else {
-			$form = '<form method="post" action="">' . "\n"
+			$form = '<form method="post" action="" class="form_event">' . "\n"
+				. '<input type="hidden" class="event_label" value="' . esc_attr(sprintf(__('Contact: %s', 'contact-form'), sanitize_title(preg_replace("/@.+/", '', $email)))) . '" />' . "\n"
 				. '<input type="hidden" name="cf_number" value="' . intval($number) . '">' . "\n";
 			
 			if ( intval($_POST['cf_number']) == $number ) {
