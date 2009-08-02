@@ -30,18 +30,6 @@ load_plugin_textdomain('contact-form', false, dirname(plugin_basename(__FILE__))
  * @package Contact Form
  **/
 
-if ( !is_admin() ) {
-	add_action('init', array('contact_form', 'send_message'));
-	
-	add_action('wp_print_styles', array('contact_form', 'add_css'));
-	add_action('wp_head', array('contact_form', 'hashcash'), 20);
-	
-	add_filter('contact_form_validate', array('contact_form', 'akismet'));
-}
-
-add_action('widgets_init', array('contact_form', 'widgets_init'));
-add_action('plugins_loaded', array('contact_form', 'fix_hashcash'));
-
 class contact_form extends WP_Widget {
 	/**
 	 * init()
@@ -768,4 +756,16 @@ addLoadEvent(function(){
 EOS;
 	} # hc_addhead()
 } # contact_form
+
+if ( !is_admin() ) {
+	add_action('init', array('contact_form', 'send_message'));
+	
+	add_action('wp_print_styles', array('contact_form', 'add_css'));
+	add_action('wp_head', array('contact_form', 'hashcash'), 20);
+	
+	add_filter('contact_form_validate', array('contact_form', 'akismet'));
+}
+
+add_action('widgets_init', array('contact_form', 'widgets_init'));
+add_action('plugins_loaded', array('contact_form', 'fix_hashcash'));
 ?>
