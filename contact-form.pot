@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
-"POT-Creation-Date: 2009-07-21 20:35+0200\n"
+"POT-Creation-Date: 2009-08-03 18:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: contact-form-info.php:2 contact-form.php:94
+#: contact-form-info.php:2 contact-form.php:82
 msgid "Contact Form"
 msgstr ""
 
@@ -27,141 +27,141 @@ msgid ""
 "forms into your posts and pages."
 msgstr ""
 
-#: contact-form.php:87
+#: contact-form.php:75
 msgid ""
 "A contact form, with spam counter-measures through WP Hashcash and Akismet."
 msgstr ""
 
-#: contact-form.php:126
+#: contact-form.php:114
 msgid "Please configure this contact form under Appearence / Widgets"
 msgstr ""
 
-#: contact-form.php:136
+#: contact-form.php:124
 #, php-format
 msgid "Contact: %s"
 msgstr ""
 
-#: contact-form.php:272
+#: contact-form.php:260
 msgid "Config"
 msgstr ""
 
-#: contact-form.php:278
+#: contact-form.php:266
 msgid "Title"
 msgstr ""
 
-#: contact-form.php:291 contact-form.php:355
+#: contact-form.php:279 contact-form.php:343
 msgid "Your Email"
 msgstr ""
 
-#: contact-form.php:303
+#: contact-form.php:291
 msgid "Captions"
 msgstr ""
 
-#: contact-form.php:351
+#: contact-form.php:339
 msgid "Contact Us"
 msgstr ""
 
-#: contact-form.php:354
+#: contact-form.php:342
 msgid "Your Name"
 msgstr ""
 
-#: contact-form.php:356
+#: contact-form.php:344
 msgid "Your Phone Number (optional)"
 msgstr ""
 
-#: contact-form.php:357 contact-form.php:381
+#: contact-form.php:345 contact-form.php:369
 msgid "Subject"
 msgstr ""
 
-#: contact-form.php:358 contact-form.php:382
+#: contact-form.php:346 contact-form.php:370
 msgid "Message"
 msgstr ""
 
-#: contact-form.php:359
+#: contact-form.php:347
 msgid "Receive a carbon copy of this email"
 msgstr ""
 
-#: contact-form.php:360 contact-form.php:384
+#: contact-form.php:348 contact-form.php:372
 msgid "Send Email"
 msgstr ""
 
-#: contact-form.php:361
+#: contact-form.php:349
 msgid "Thank you for your email."
 msgstr ""
 
-#: contact-form.php:362
+#: contact-form.php:350
 msgid "Please enter a valid email."
 msgstr ""
 
-#: contact-form.php:363
+#: contact-form.php:351
 msgid "Please fill in all of the required fields."
 msgstr ""
 
-#: contact-form.php:364
+#: contact-form.php:352
 msgid "Sorry... Your message has been caught as spam and was not sent."
 msgstr ""
 
-#: contact-form.php:378
+#: contact-form.php:366
 msgid "Name"
 msgstr ""
 
-#: contact-form.php:379
+#: contact-form.php:367
 msgid "Email"
 msgstr ""
 
-#: contact-form.php:380
+#: contact-form.php:368
 msgid "Phone Number"
 msgstr ""
 
-#: contact-form.php:383
+#: contact-form.php:371
 msgid "Receive a copy"
 msgstr ""
 
-#: contact-form.php:385
+#: contact-form.php:373
 msgid "Thank you"
 msgstr ""
 
-#: contact-form.php:386
+#: contact-form.php:374
 msgid "Invalid Email"
 msgstr ""
 
-#: contact-form.php:387
+#: contact-form.php:375
 msgid "Missing Field"
 msgstr ""
 
-#: contact-form.php:388
+#: contact-form.php:376
 msgid "Spam Caught"
 msgstr ""
 
-#: contact-form.php:444
+#: contact-form.php:432
 msgid "Site:"
 msgstr ""
 
-#: contact-form.php:445
+#: contact-form.php:433
 msgid "From:"
 msgstr ""
 
-#: contact-form.php:446
+#: contact-form.php:434
 msgid "Email:"
 msgstr ""
 
-#: contact-form.php:448
+#: contact-form.php:436
 msgid "Phone:"
 msgstr ""
 
-#: contact-form.php:713
+#: contact-form.php:701
 msgid ""
 "Wordpress Hashcash needs javascript to work, but your browser has javascript "
 "disabled. Your comment will be deleted!"
 msgstr ""
 
-#: contact-form.php:716
+#: contact-form.php:704
 msgid ""
 "Wordpress Hashcash needs javascript to work, but your browser has javascript "
 "disabled. Your comment will be queued in Akismet!"
 msgstr ""
 
-#: contact-form.php:720
+#: contact-form.php:708
 msgid ""
 "Wordpress Hashcash needs javascript to work, but your browser has javascript "
 "disabled. Your comment will be placed in moderation!"
