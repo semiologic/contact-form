@@ -388,7 +388,7 @@ class contact_form extends WP_Widget {
 		$folder = plugin_dir_url(__FILE__);
 		$css = $folder . 'css/contact-form.css';
 		
-		wp_enqueue_style('contact_form', $css, null, '2.0');
+		wp_enqueue_style('contact_form', $css, null, '20090903');
 	} # add_css()
 	
 	
