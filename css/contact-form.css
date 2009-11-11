@@ -44,8 +44,8 @@ textarea.cf_field {
 }
 
 .cf_error {
-	border: solid 1px #c22;
-	background: #ffeeee;
-	color: #b22;
+	border: solid 1px #b11;
+	background: #fee;
+	color: #b11;
 	padding: 1em;
 }
