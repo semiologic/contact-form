@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.0.1
+Version: 2.0.2 alpha
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -204,6 +204,16 @@ class contact_form extends WP_Widget {
 			$form .= '</form>' . "\n";
 		}
 		
+		$cookie_name = 'cf_' . COOKIEHASH;
+		$cookie_path = COOKIEPATH;
+		$script = <<<EOS
+
+<script type="text/javascript">
+document.cookie = "$cookie_name=1;path=$cookie_path";
+</script>
+
+EOS;
+		
 		$title = apply_filters('widget_title', $title);
 		
 		echo $before_widget . "\n"
@@ -213,6 +223,7 @@ class contact_form extends WP_Widget {
 				)
 			. '<div style="clear: both;"></div>' . "\n"
 			. $form
+			. $script
 			. $after_widget . "\n";
 	} # widget()
 	
@@ -399,19 +410,6 @@ class contact_form extends WP_Widget {
 	 **/
 
 	function send_message() {
-		if ( empty($_POST['cf_number']) ) {
-			# toggle cf
-			setcookie(
-				'cf_' . COOKIEHASH,
-				1,
-				time() + 3600,
-				COOKIEPATH,
-				COOKIE_DOMAIN
-				);
-
-			return;
-		}
-		
 		if ( contact_form::validate() ) {
 			$options = get_option('widget_contact_form');
 			
@@ -758,7 +756,8 @@ EOS;
 } # contact_form
 
 if ( !is_admin() ) {
-	add_action('init', array('contact_form', 'send_message'));
+	if ( $_POST )
+		add_action('init', array('contact_form', 'send_message'));
 	
 	add_action('wp_print_styles', array('contact_form', 'add_css'));
 	add_action('wp_head', array('contact_form', 'hashcash'), 20);
