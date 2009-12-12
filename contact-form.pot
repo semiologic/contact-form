@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.0\n"
+"Project-Id-Version: 2.0.2\n"
 "Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
-"POT-Creation-Date: 2009-09-14 19:12+0200\n"
+"POT-Creation-Date: 2009-12-12 19:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,127 +41,127 @@ msgstr ""
 msgid "Contact: %s"
 msgstr ""
 
-#: contact-form.php:260
+#: contact-form.php:271
 msgid "Config"
 msgstr ""
 
-#: contact-form.php:266
+#: contact-form.php:277
 msgid "Title"
 msgstr ""
 
-#: contact-form.php:279 contact-form.php:343
+#: contact-form.php:290 contact-form.php:354
 msgid "Your Email"
 msgstr ""
 
-#: contact-form.php:291
+#: contact-form.php:302
 msgid "Captions"
 msgstr ""
 
-#: contact-form.php:339
+#: contact-form.php:350
 msgid "Contact Us"
 msgstr ""
 
-#: contact-form.php:342
+#: contact-form.php:353
 msgid "Your Name"
 msgstr ""
 
-#: contact-form.php:344
+#: contact-form.php:355
 msgid "Your Phone Number (optional)"
 msgstr ""
 
-#: contact-form.php:345 contact-form.php:369
+#: contact-form.php:356 contact-form.php:380
 msgid "Subject"
 msgstr ""
 
-#: contact-form.php:346 contact-form.php:370
+#: contact-form.php:357 contact-form.php:381
 msgid "Message"
 msgstr ""
 
-#: contact-form.php:347
+#: contact-form.php:358
 msgid "Receive a carbon copy of this email"
 msgstr ""
 
-#: contact-form.php:348 contact-form.php:372
+#: contact-form.php:359 contact-form.php:383
 msgid "Send Email"
 msgstr ""
 
-#: contact-form.php:349
+#: contact-form.php:360
 msgid "Thank you for your email."
 msgstr ""
 
-#: contact-form.php:350
+#: contact-form.php:361
 msgid "Please enter a valid email."
 msgstr ""
 
-#: contact-form.php:351
+#: contact-form.php:362
 msgid "Please fill in all of the required fields."
 msgstr ""
 
-#: contact-form.php:352
+#: contact-form.php:363
 msgid "Sorry... Your message has been caught as spam and was not sent."
 msgstr ""
 
-#: contact-form.php:366
+#: contact-form.php:377
 msgid "Name"
 msgstr ""
 
-#: contact-form.php:367
+#: contact-form.php:378
 msgid "Email"
 msgstr ""
 
-#: contact-form.php:368
+#: contact-form.php:379
 msgid "Phone Number"
 msgstr ""
 
-#: contact-form.php:371
+#: contact-form.php:382
 msgid "Receive a copy"
 msgstr ""
 
-#: contact-form.php:373
+#: contact-form.php:384
 msgid "Thank you"
 msgstr ""
 
-#: contact-form.php:374
+#: contact-form.php:385
 msgid "Invalid Email"
 msgstr ""
 
-#: contact-form.php:375
+#: contact-form.php:386
 msgid "Missing Field"
 msgstr ""
 
-#: contact-form.php:376
+#: contact-form.php:387
 msgid "Spam Caught"
 msgstr ""
 
-#: contact-form.php:432
+#: contact-form.php:430
 msgid "Site:"
 msgstr ""
 
-#: contact-form.php:433
+#: contact-form.php:431
 msgid "From:"
 msgstr ""
 
-#: contact-form.php:434
+#: contact-form.php:432
 msgid "Email:"
 msgstr ""
 
-#: contact-form.php:436
+#: contact-form.php:434
 msgid "Phone:"
 msgstr ""
 
-#: contact-form.php:701
+#: contact-form.php:699
 msgid ""
 "Wordpress Hashcash needs javascript to work, but your browser has javascript "
 "disabled. Your comment will be deleted!"
 msgstr ""
 
-#: contact-form.php:704
+#: contact-form.php:702
 msgid ""
 "Wordpress Hashcash needs javascript to work, but your browser has javascript "
 "disabled. Your comment will be queued in Akismet!"
 msgstr ""
 
-#: contact-form.php:708
+#: contact-form.php:706
 msgid ""
 "Wordpress Hashcash needs javascript to work, but your browser has javascript "
 "disabled. Your comment will be placed in moderation!"
