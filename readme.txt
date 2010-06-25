@@ -62,6 +62,10 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 2.0.3 =
+
+- Fix PHP notice
+
 = 2.0.2 =
 
 - Improve cache support
