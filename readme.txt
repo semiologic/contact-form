@@ -62,6 +62,10 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 2.0.4 =
+
+- Fix HTML Validation Errors - Missing rows and cols attar on text area field
+
 = 2.0.3 =
 
 - Fix PHP notice
