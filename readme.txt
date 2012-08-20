@@ -3,7 +3,7 @@ Contributors: Denis-de-Bernardy
 Donate link: http://www.semiologic.com/partners/
 Tags: semiologic
 Requires at least: 2.8
-Tested up to: 3.2.1
+Tested up to: 3.3.2
 Stable tag: trunk
 
 A widget-driven contact form.
@@ -62,9 +62,13 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 2.1.0 =
+
+- Cookies not being set correctly using JavaScript approach.  Using PHP setcookie now.
+
 = 2.0.4 =
 
-- Fix HTML Validation Errors - Missing rows and cols attar on text area field
+- Fix HTML Validation Errors - Missing rows and cols attr on text area field
 
 = 2.0.3 =
 

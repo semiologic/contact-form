@@ -3,8 +3,8 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.0.4
-Author: Denis de Bernardy
+Version: 2.1.0
+Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
 Domain Path: /lang
@@ -50,8 +50,8 @@ class contact_form extends WP_Widget {
 			}
 		}
 	} # init()
-	
-	
+
+
 	/**
 	 * widgets_init()
 	 *
@@ -61,8 +61,8 @@ class contact_form extends WP_Widget {
 	function widgets_init() {
 		register_widget('contact_form');
 	} # widgets_init()
-	
-	
+
+
 	/**
 	 * contact_form()
 	 *
@@ -77,12 +77,12 @@ class contact_form extends WP_Widget {
 		$control_ops = array(
 			'width' => 500,
 			);
-		
+
 		$this->init();
 		$this->WP_Widget('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
 	} # contact_form()
-	
-	
+
+
 	/**
 	 * widget()
 	 *
@@ -95,7 +95,7 @@ class contact_form extends WP_Widget {
 		extract($args, EXTR_SKIP);
 		$instance = wp_parse_args($instance, contact_form::defaults());
 		extract($instance, EXTR_SKIP);
-		
+
 		if ( is_admin() ) {
 			echo $before_widget
 				. ( $email
@@ -105,10 +105,10 @@ class contact_form extends WP_Widget {
 				. $after_widget;
 			return;
 		}
-		
+
 		preg_match("/\d+$/", $widget_id, $number);
 		$number = intval(end($number));
-		
+
 		if ( !is_email($email) ) {
 			$form = '<div style="border: solid 1px red; background: #ffeeee; color: #cc0000; font-weight: bold; padding: 10px;">'
 			. __('Please configure this contact form under Appearence / Widgets', 'contact-form')
@@ -123,7 +123,7 @@ class contact_form extends WP_Widget {
 			$form = '<form method="post" action="" class="form_event">' . "\n"
 				. '<input type="hidden" class="event_label" value="' . esc_attr(sprintf(__('Contact: %s', 'contact-form'), sanitize_title(preg_replace("/@.+/", '', $email)))) . '" />' . "\n"
 				. '<input type="hidden" name="cf_number" value="' . intval($number) . '" />' . "\n";
-			
+
 			if ( intval($_POST['cf_number']) == $number ) {
 				$errorCode = $GLOBALS['cf_status'][intval($_POST['cf_number'])];
 
@@ -133,7 +133,7 @@ class contact_form extends WP_Widget {
 						. '</div>' . "\n";
 				}
 			}
-			
+
 			foreach ( array(
 					'name',
 					'email',
@@ -197,25 +197,17 @@ class contact_form extends WP_Widget {
 					break;
 				}
 			}
-			
+
 			if ( function_exists('wphc_option') )
 				$form .= '<input type="hidden" name="wphc_value" value="" />' . "\n";
 
 			$form .= '</form>' . "\n";
 		}
-		
-		$cookie_name = 'cf_' . COOKIEHASH;
-		$cookie_path = COOKIEPATH;
-		$script = <<<EOS
 
-<script type="text/javascript">
-document.cookie = "$cookie_name=1;path=$cookie_path";
-</script>
+		$script = "";
 
-EOS;
-		
 		$title = apply_filters('widget_title', $title);
-		
+
 		echo $before_widget . "\n"
 			. ( $title
 				? ( $before_title . $title . $after_title )
@@ -226,8 +218,8 @@ EOS;
 			. $script
 			. $after_widget . "\n";
 	} # widget()
-	
-	
+
+
 	/**
 	 * update()
 	 *
@@ -239,10 +231,10 @@ EOS;
 	function update($new_instance, $old_instance) {
 		$title = trim($new_instance['title']);
 		$email = trim($new_instance['email']);
-		
+
 		if ( !is_email($email) )
 			$email = get_option('admin_email');
-		
+
 		$captions = array();
 		foreach ( array_keys(contact_form::captions()) as $var ) {
 			if ( !current_user_can('unfiltered_html') )
@@ -253,8 +245,8 @@ EOS;
 
 		return compact('title', 'email', 'captions');
 	} # update()
-	
-	
+
+
 	/**
 	 * form()
 	 *
@@ -267,11 +259,11 @@ EOS;
 		$instance = wp_parse_args($instance, $defaults);
 		$instance['captions'] = wp_parse_args($instance['captions'], $defaults['captions']);
 		extract($instance, EXTR_SKIP);
-		
+
 		echo '<h3>' . __('Config', 'contact-form') . '</h3>' . "\n";
-		
+
 		echo '<table style="width: 460px;">' . "\n";
-		
+
 		echo '<tr valign="top">' . "\n"
 			. '<th scope="row" style="width: 100px;">'
 			. __('Title', 'contact-form')
@@ -284,7 +276,7 @@ EOS;
 				. ' />'
 			. '</td>' . "\n"
 			. '</tr>' . "\n";
-		
+
 		echo '<tr valign="top">' . "\n"
 			. '<th scope="row" style="width: 100px;">'
 			. __('Your Email', 'contact-form')
@@ -296,13 +288,13 @@ EOS;
 				. ' />'
 			. '</td>' . "\n"
 			. '</tr>' . "\n";
-		
+
 		echo '</table>' . "\n";
-		
+
 		echo '<h3>' . __('Captions', 'contact-form') . '</h3>' . "\n";
-		
+
 		echo '<table style="width: 460px;">' . "\n";
-		
+
 		foreach ( contact_form::captions() as $var => $caption ) {
 			switch ( $var ) {
 			case 'success_message':
@@ -334,11 +326,11 @@ EOS;
 				break;
 			}
 		}
-		
+
 		echo '</table>' . "\n";
 	} # form()
-	
-	
+
+
 	/**
 	 * defaults()
 	 *
@@ -364,8 +356,8 @@ EOS;
 				)
 			);
 	} # defaults()
-	
-	
+
+
 	/**
 	 * captions()
 	 *
@@ -387,22 +379,22 @@ EOS;
 			'spam_caught' => __('Spam Caught', 'contact-form'),
 			);
 	} # captions()
-	
-	
+
+
 	/**
 	 * add_css()
 	 *
 	 * @return void
 	 **/
-	
+
 	function add_css() {
 		$folder = plugin_dir_url(__FILE__);
 		$css = $folder . 'css/contact-form.css';
-		
+
 		wp_enqueue_style('contact_form', $css, null, '20090903');
 	} # add_css()
-	
-	
+
+
 	/**
 	 * send_message()
 	 *
@@ -412,21 +404,21 @@ EOS;
 	function send_message() {
 		if ( contact_form::validate() ) {
 			$options = get_option('widget_contact_form');
-			
+
 			$number = intval($_POST['cf_number']);
-			
+
 			$options = $options[$number];
-			
+
 			$to = $options['email'];
-			
+
 			if ( !is_email($to) )
 				return;
-			
+
 			foreach ( array('name', 'email', 'phone', 'subject', 'message') as $var )
 				$$var = strip_tags(stripslashes($_POST['cf_' . $var]));
-			
+
 			$headers = 'From: "' . $name . '" <' . $email . '>';
-			
+
 			$message = __('Site:', 'contact-form') . ' ' . get_option('blogname') . "\n"
 				. __('From:', 'contact-form') . ' ' . $name . "\n"
 				. __('Email:', 'contact-form') . ' ' . $email . "\n"
@@ -436,17 +428,17 @@ EOS;
 					)
 				. "\n"
 				. $message;
-			
+
 			wp_mail($to, $subject, $message, $headers);
-			
+
 			if ( $_POST['cf_cc'] )
 				wp_mail($email, $subject, $message, $headers);
-			
+
 			$GLOBALS['cf_status'][$number] = 'success';
 		}
 	} # send_message()
-	
-	
+
+
 	/**
 	 * validate()
 	 *
@@ -455,10 +447,10 @@ EOS;
 
 	function validate() {
 		$status = 'spam_caught';
-		
+
 		$ok = strpos($_SERVER['HTTP_REFERER'], $_SERVER['REQUEST_URI']) !== false
 			&& isset($_COOKIE['cf_' . COOKIEHASH]) && $_COOKIE['cf_' . COOKIEHASH];
-		
+
 		# sanitize $_POST variables
 		foreach ( array('name', 'email', 'phone', 'subject', 'message', 'number') as $var )
 			$_POST['cf_' . $var] = isset($_POST['cf_' . $var]) ? trim(strip_tags($_POST['cf_' . $var])) : '';
@@ -485,18 +477,18 @@ EOS;
 						$status = 'required_field';
 					}
 				}
-				
+
 				if ( !$ok )
 					break;
 			} # foreach
 		}
-		
+
 		# filter through hashcash
 		if ( $ok && function_exists('wphc_option') ) {
 			$wphc_options = wphc_option();
 			$ok = in_array($_POST["wphc_value"], $wphc_options['key']);
 		}
-		
+
 		# filter through akismet
 		if ( $ok ) {
 			# create a fake comment
@@ -511,18 +503,18 @@ EOS;
 			$args = array();
 			$args['ok'] =& $ok;
 			$args['comment'] =& $comment;
-			
+
 			# comment spam filters can now filter this the usual way with an appropriate method
 			$args = apply_filters('contact_form_validate', $args);
 		}
-		
+
 		if ( !$ok )
 			$GLOBALS['cf_status'][intval($_POST['cf_number'])] = $status;
-		
+
 		return $ok;
 	} # validate()
-	
-	
+
+
 	/**
 	 * hashcash()
 	 *
@@ -532,7 +524,7 @@ EOS;
 	function hashcash() {
 		if ( !function_exists('wphc_option') )
 			return;
-		
+
 		if ( !is_singular() ) {
 			$hc_loader = <<<EOS
 function addLoadEvent(func) {
@@ -554,7 +546,7 @@ EOS;
 			$hc_loader = '';
 			$hc_js = '';
 		}
-		
+
 		echo <<<EOS
 
 <script type="text/javascript">
@@ -574,8 +566,8 @@ addLoadEvent(function() {
 
 EOS;
 	} # hashcash()
-	
-	
+
+
 	/**
 	 * akismet()
 	 *
@@ -588,7 +580,7 @@ EOS;
 			return $args;
 		else
 			$comment =& $args['comment'];
-		
+
 		# pass posted message through akismet
 		if ( function_exists('akismet_auto_check_comment') && get_option('wordpress_api_key') ) {
 			global $akismet_api_host, $akismet_api_port;
@@ -613,11 +605,11 @@ EOS;
 			if ( 'true' == $response[1] )
 				$args['ok'] = false;
 		}
-		
+
 		return $args;
 	} # akismet()
-	
-	
+
+
 	/**
 	 * upgrade()
 	 *
@@ -629,23 +621,23 @@ EOS;
 		$widget_contexts = class_exists('widget_contexts')
 			? get_option('widget_contexts')
 			: false;
-		
+
 		foreach ( $ops as $k => $o ) {
 			if ( isset($widget_contexts['contact_form-' . $k]) ) {
 				$ops[$k]['widget_contexts'] = $widget_contexts['contact_form-' . $k];
 			}
 		}
-		
+
 		return $ops;
 	} # upgrade()
-	
-	
+
+
 	/**
 	 * fix_hashcash()
 	 *
 	 * @return void
 	 **/
-	
+
 	function fix_hashcash() {
 		# hashcash
 		if ( function_exists('wphc_add_commentform') && !class_exists('sem_fixes') ) {
@@ -656,35 +648,35 @@ EOS;
 			remove_action('wp_head', 'wphc_posthead');
 			add_action('comment_form', array('contact_form', 'hc_add_message'));
 			add_action('wp_head', array('contact_form', 'hc_addhead'));
-			
+
 			if ( is_admin() )
 				remove_filter('preprocess_comment', 'wphc_check_hidden_tag');
 		}
 	} # fix_hashcash()
-	
-	
+
+
 	/**
 	 * hc_options()
 	 *
 	 * @param array $o
 	 * @return array $o
 	 **/
-	
+
 	function hc_options($o) {
 		if ( function_exists('akismet_init') && get_option('wordpress_api_key') ) {
 			$o['moderation'] = 'akismet';
 		} else {
 			$o['moderation'] = 'delete';
 		}
-		
+
 		$o['validate-ip'] = 'on';
 		$o['validate-url'] = 'on';
 		$o['logging'] = '';
-		
+
 		return $o;
 	} # hc_options()
-	
-	
+
+
 	/**
 	 * hc_add_message()
 	 *
@@ -706,22 +698,22 @@ EOS;
 			$warning = __('Wordpress Hashcash needs javascript to work, but your browser has javascript disabled. Your comment will be placed in moderation!', 'contact-form');
 			break;
 		}
-		
+
 		echo '<input type="hidden" id="wphc_value" name="wphc_value" value="" />' . "\n";
 		echo '<noscript><p><strong>' . $warning . '</strong></p></noscript>' . "\n";
 	} # hc_add_message()
-	
-	
+
+
 	/**
 	 * hc_addhead()
 	 *
 	 * @return void
 	 **/
-	
+
 	function hc_addhead() {
 		if ( !is_singular() )
 			return;
-		
+
 		$hc_js = wphc_getjs();
 
 		echo <<<EOS
@@ -753,16 +745,24 @@ addLoadEvent(function(){
 
 EOS;
 	} # hc_addhead()
+
+	function set_form_cookie() {
+		if (!isset($_COOKIE['cf_' . COOKIEHASH])) {
+			setcookie('cf_' . COOKIEHASH, 1, time()+3600, COOKIEPATH, COOKIE_DOMAIN, false);
+		}
+	} # set_form_cookie
 } # contact_form
 
 if ( !is_admin() ) {
 	if ( $_POST )
 		add_action('init', array('contact_form', 'send_message'));
-	
+
 	add_action('wp_print_styles', array('contact_form', 'add_css'));
 	add_action('wp_head', array('contact_form', 'hashcash'), 20);
-	
+
 	add_filter('contact_form_validate', array('contact_form', 'akismet'));
+
+	add_action( 'init', array('contact_form', 'set_form_cookie'));
 }
 
 add_action('widgets_init', array('contact_form', 'widgets_init'));
