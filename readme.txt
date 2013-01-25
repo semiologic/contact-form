@@ -2,7 +2,7 @@
 Contributors: Denis-de-Bernardy
 Donate link: http://www.semiologic.com/partners/
 Tags: semiologic
-Requires at least: 3.0
+Requires at least: 3.1
 Tested up to: 3.5
 Stable tag: trunk
 
@@ -40,6 +40,10 @@ As much as a form is nice in a large sidebar, you'll usually want it in a static
 3. Create or edit your "Contact Us" page; note the "Widgets" drop down menu
 4. Select your newly configured contact form in the "Widgets" drop down menu to insert it where your mouse cursor is at
 
+= Autoresponder =
+
+If text is entered in the Auto Responder field of the widget, the form will send an email to submitter with response message.
+
 = Google Analytics integration =
 
 Combining this plugin with the Google Analytics (GA) plugin adds an interesting bonus. Specifically, contact form usage gets tracked as page events.
@@ -61,6 +65,11 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 
 == Change Log ==
+
+= 2.2.0 =
+
+- Added autoresponder capability.
+- Fixed unknown index warnings when form initially is displayed.
 
 = 2.1.0 =
 

@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.1.0
+Version: 2.2.0
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -113,7 +113,7 @@ class contact_form extends WP_Widget {
 			$form = '<div style="border: solid 1px red; background: #ffeeee; color: #cc0000; font-weight: bold; padding: 10px;">'
 			. __('Please configure this contact form under Appearence / Widgets', 'contact-form')
 			. '</div>' . "\n";
-		} elseif ( intval($_POST['cf_number']) == $number
+		} elseif ( isset($_POST['cf_number']) && intval($_POST['cf_number']) == $number
 			&& $GLOBALS['cf_status'][intval($_POST['cf_number'])] == 'success'
 			) {
 			$form = '<div class="cf_success">'
@@ -124,7 +124,7 @@ class contact_form extends WP_Widget {
 				. '<input type="hidden" class="event_label" value="' . esc_attr(sprintf(__('Contact: %s', 'contact-form'), sanitize_title(preg_replace("/@.+/", '', $email)))) . '" />' . "\n"
 				. '<input type="hidden" name="cf_number" value="' . intval($number) . '" />' . "\n";
 
-			if ( intval($_POST['cf_number']) == $number ) {
+			if ( isset($_POST['cf_number']) && intval($_POST['cf_number']) == $number ) {
 				$errorCode = $GLOBALS['cf_status'][intval($_POST['cf_number'])];
 
 				if ( $errorCode ) {
@@ -155,7 +155,10 @@ class contact_form extends WP_Widget {
 						. $captions[$var] . '<br />' . "\n"
 						. '<input type="text" class="cf_field"'
 							. ' name="cf_' . $var . '"'
-							. ' value="' . esc_attr(stripslashes($_POST['cf_' . $var])) . '"'
+							. ' value="' . (isset($_POST['cf_' . $var])
+                                ? esc_attr(stripslashes($_POST['cf_' . $var]))
+                                : '')
+                                . '"'
 							. ' />'
 						. '</label>'
 						. '</div>' . "\n";
@@ -167,7 +170,9 @@ class contact_form extends WP_Widget {
 						. '<textarea cols="40" rows="20" class="cf_field"'
 							. ' name="cf_' . $var . '"'
 							. ' >'
-						. esc_attr(stripslashes($_POST['cf_' . $var]))
+						. (isset($_POST['cf_' . $var])
+                            ? esc_attr(stripslashes($_POST['cf_' . $var]))
+                            : '')
 						. '</textarea>'
 						. '</label>'
 						. '</div>' . "\n";
@@ -231,9 +236,13 @@ class contact_form extends WP_Widget {
 	function update($new_instance, $old_instance) {
 		$title = trim($new_instance['title']);
 		$email = trim($new_instance['email']);
+        $name = trim($new_instance['name']);
 
 		if ( !is_email($email) )
 			$email = get_option('admin_email');
+
+        if ( empty($name) )
+     		$name = get_option('blogname');
 
 		$captions = array();
 		foreach ( array_keys(contact_form::captions()) as $var ) {
@@ -243,7 +252,7 @@ class contact_form extends WP_Widget {
 				$captions[$var] = $new_instance['captions'][$var];
 		}
 
-		return compact('title', 'email', 'captions');
+		return compact('title', 'email', 'name', 'captions');
 	} # update()
 
 
@@ -288,6 +297,18 @@ class contact_form extends WP_Widget {
 				. ' />'
 			. '</td>' . "\n"
 			. '</tr>' . "\n";
+
+        echo '<tr valign="top">' . "\n"
+     			. '<th scope="row" style="width: 100px;">'
+     			. __('Your Name', 'contact-form')
+     			. '</th>' . "\n"
+     			. '<td>'
+     			.'<input type="text" size="20" class="widefat"'
+     				. ' name="' . $this->get_field_name('name') . '"'
+     				. ' value="' . esc_attr($name) . '"'
+     				. ' />'
+     			. '</td>' . "\n"
+     			. '</tr>' . "\n";
 
 		echo '</table>' . "\n";
 
@@ -341,6 +362,7 @@ class contact_form extends WP_Widget {
 		return array(
 			'title' => __('Contact Us', 'contact-form'),
 			'email' => get_option('admin_email'),
+            'name' => get_option('blogname'),
 			'captions' => array(
 				'name' => __('Your Name', 'contact-form'),
 				'email' => __('Your Email', 'contact-form'),
@@ -353,6 +375,7 @@ class contact_form extends WP_Widget {
 				'invalid_email' => __('Please enter a valid email.', 'contact-form'),
 				'required_field' => __('Please fill in all of the required fields.', 'contact-form'),
 				'spam_caught' => __('Sorry... Your message has been caught as spam and was not sent.', 'contact-form'),
+                'autorespond_message' => __('', 'contact-form'),
 				)
 			);
 	} # defaults()
@@ -377,6 +400,7 @@ class contact_form extends WP_Widget {
 			'invalid_email' => __('Invalid Email', 'contact-form'),
 			'required_field' => __('Missing Field', 'contact-form'),
 			'spam_caught' => __('Spam Caught', 'contact-form'),
+            'autorespond_message' => __('Auto Responder', 'contact-form'),
 			);
 	} # captions()
 
@@ -431,8 +455,20 @@ class contact_form extends WP_Widget {
 
 			wp_mail($to, $subject, $message, $headers);
 
-			if ( $_POST['cf_cc'] )
+			if ( isset($_POST['cf_cc']) && $_POST['cf_cc'] )
 				wp_mail($email, $subject, $message, $headers);
+
+            $autorespond_message = $options['captions']['autorespond_message'];
+            if (!empty($autorespond_message)) {
+
+                $sitename = $options['name'];
+
+                $headers = 'From: "' . $sitename . '" <' . $to . '>';
+
+                $autorespond_subject = 're: ' . $subject;
+
+                wp_mail($email, $autorespond_subject, $autorespond_message, $headers);
+            }
 
 			$GLOBALS['cf_status'][$number] = 'success';
 		}
