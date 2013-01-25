@@ -319,6 +319,7 @@ class contact_form extends WP_Widget {
 		foreach ( contact_form::captions() as $var => $caption ) {
 			switch ( $var ) {
 			case 'success_message':
+            case 'autorespond_message':
 				echo '<tr valign="top">' . "\n"
 					. '<th scope="row" style="width: 100px;">'
 					. $caption
