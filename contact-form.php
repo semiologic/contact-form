@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.2.0
+Version: 2.2.1
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -178,18 +178,20 @@ class contact_form extends WP_Widget {
 						. '</div>' . "\n";
 					break;
 				case 'cc':
-					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
-						. '<label>'
-						. '<input type="checkbox" class="cf_checkbox"'
-							. ' name="cf_' . $var . '"'
-							. ( isset($_POST['cf_' . $var])
-								? ' checked="checked"'
-								: ''
-								)
-							. ' />'
-						. '&nbsp;' . $captions[$var] . "\n"
-						. '</label>'
-						.'</div>' . "\n";
+                    if ( $captions[$var] ) {
+                        $form .= '<div class="cf_field cf_' . $var . '">' . "\n"
+                            . '<label>'
+                            . '<input type="checkbox" class="cf_checkbox"'
+                                . ' name="cf_' . $var . '"'
+                                . ( isset($_POST['cf_' . $var])
+                                    ? ' checked="checked"'
+                                    : ''
+                                    )
+                                . ' />'
+                            . '&nbsp;' . $captions[$var] . "\n"
+                            . '</label>'
+                            .'</div>' . "\n";
+                    }
 					break;
 				case 'send':
 					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"

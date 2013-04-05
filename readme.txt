@@ -66,6 +66,10 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 2.2.1 =
+
+- Don't display cc checkbox if the caption is empty
+
 = 2.2.0 =
 
 - Added autoresponder capability.
