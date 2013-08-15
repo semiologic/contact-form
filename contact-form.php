@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.2.1
+Version: 2.3
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -31,7 +31,38 @@ load_plugin_textdomain('contact-form', false, dirname(plugin_basename(__FILE__))
  **/
 
 class contact_form extends WP_Widget {
-	/**
+    /**
+     * contact_form()
+     */
+    function contact_form() {
+        if ( !is_admin() ) {
+        	if ( $_POST )
+        		add_action('init', array($this, 'send_message'));
+
+        	add_action('wp_print_styles', array($this, 'add_css'));
+        	add_action('wp_head', array($this, 'hashcash'), 20);
+
+        	add_filter('contact_form_validate', array($this, 'akismet'));
+
+        	add_action( 'init', array($this, 'set_form_cookie'));
+        }
+
+        add_action('widgets_init', array($this, 'widgets_init'));
+        add_action('plugins_loaded', array($this, 'fix_hashcash'));
+
+        $widget_ops = array(
+      			'classname' => 'contact_form',
+      			'description' => __('A contact form, with spam counter-measures through WP Hashcash and Akismet.', 'contact-form'),
+      			);
+      		$control_ops = array(
+      			'width' => 500,
+      			);
+
+      		$this->init();
+      		$this->WP_Widget('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
+    } #contact_form
+
+    /**
 	 * init()
 	 *
 	 * @return void
@@ -61,26 +92,6 @@ class contact_form extends WP_Widget {
 	function widgets_init() {
 		register_widget('contact_form');
 	} # widgets_init()
-
-
-	/**
-	 * contact_form()
-	 *
-	 * @return void
-	 **/
-
-	function contact_form() {
-		$widget_ops = array(
-			'classname' => 'contact_form',
-			'description' => __('A contact form, with spam counter-measures through WP Hashcash and Akismet.', 'contact-form'),
-			);
-		$control_ops = array(
-			'width' => 500,
-			);
-
-		$this->init();
-		$this->WP_Widget('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
-	} # contact_form()
 
 
 	/**
@@ -481,7 +492,7 @@ class contact_form extends WP_Widget {
 	/**
 	 * validate()
 	 *
-	 * @return void
+	 * @return bool
 	 **/
 
 	function validate() {
@@ -611,7 +622,7 @@ EOS;
 	 * akismet()
 	 *
 	 * @param array $args Status and fake WP comment
-	 * @return void
+	 * @return array
 	 **/
 
 	function akismet($args) {
@@ -680,13 +691,13 @@ EOS;
 	function fix_hashcash() {
 		# hashcash
 		if ( function_exists('wphc_add_commentform') && !class_exists('sem_fixes') ) {
-			add_filter('option_plugin_wp-hashcash', array('contact_form', 'hc_options'));
+			add_filter('option_plugin_wp-hashcash', array($this, 'hc_options'));
 			remove_action('admin_menu', 'wphc_add_options_to_admin');
 			remove_action('widgets_init', 'wphc_widget_init');
 			remove_action('comment_form', 'wphc_add_commentform');
 			remove_action('wp_head', 'wphc_posthead');
-			add_action('comment_form', array('contact_form', 'hc_add_message'));
-			add_action('wp_head', array('contact_form', 'hc_addhead'));
+			add_action('comment_form', array($this, 'hc_add_message'));
+			add_action('wp_head', array($this, 'hc_addhead'));
 
 			if ( is_admin() )
 				remove_filter('preprocess_comment', 'wphc_check_hidden_tag');
@@ -792,18 +803,6 @@ EOS;
 	} # set_form_cookie
 } # contact_form
 
-if ( !is_admin() ) {
-	if ( $_POST )
-		add_action('init', array('contact_form', 'send_message'));
 
-	add_action('wp_print_styles', array('contact_form', 'add_css'));
-	add_action('wp_head', array('contact_form', 'hashcash'), 20);
-
-	add_filter('contact_form_validate', array('contact_form', 'akismet'));
-
-	add_action( 'init', array('contact_form', 'set_form_cookie'));
-}
-
-add_action('widgets_init', array('contact_form', 'widgets_init'));
-add_action('plugins_loaded', array('contact_form', 'fix_hashcash'));
+$contact_form = new contact_form();
 ?>
