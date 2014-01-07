@@ -3,11 +3,12 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.3
+Version: 2.3.1
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
 Domain Path: /lang
+License: Dual licensed under the MIT and GPLv2 licenses
 */
 
 
@@ -15,9 +16,7 @@ Domain Path: /lang
 Terms of use
 ------------
 
-This software is copyright Mesoconcepts (http://www.mesoconcepts.com), and is distributed under the terms of the Mesoconcepts license. In a nutshell, you may freely use it for any purpose, but may not redistribute it without written permission.
-
-http://www.mesoconcepts.com/license/
+This software is copyright Denis de Bernardy & Mike Koepke, and is distributed under the terms of the MIT and GPLv2 licenses.
 **/
 
 
@@ -34,7 +33,7 @@ class contact_form extends WP_Widget {
     /**
      * contact_form()
      */
-    function contact_form() {
+	public function __construct() {
         if ( !is_admin() ) {
         	if ( $_POST )
         		add_action('init', array($this, 'send_message'));
@@ -803,6 +802,4 @@ EOS;
 	} # set_form_cookie
 } # contact_form
 
-
 $contact_form = new contact_form();
-?>
