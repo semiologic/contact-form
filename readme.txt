@@ -66,6 +66,13 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 2.4 =
+
+- Fix duplicate emails being sent that got introduced in 2.3
+- Add identifier for sem_cache detection.  Pages with contact form will not be cached due to false spam detection.
+- Fix typo in email setup message.
+- Refactored some of the code around spam detection.
+
 = 2.3.1 =
 
 - WP 3.8 compat

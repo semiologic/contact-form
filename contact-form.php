@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.3.1
+Version: 2.4
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -35,13 +35,12 @@ class contact_form extends WP_Widget {
      */
 	public function __construct() {
         if ( !is_admin() ) {
-        	if ( $_POST )
-        		add_action('init', array($this, 'send_message'));
 
         	add_action('wp_print_styles', array($this, 'add_css'));
         	add_action('wp_head', array($this, 'hashcash'), 20);
 
-        	add_filter('contact_form_validate', array($this, 'akismet'));
+	        if ( function_exists('akismet_auto_check_comment') && (get_option('wordpress_api_key') !== false) )
+        	    add_filter('contact_form_validate', array($this, 'akismet'));
 
         	add_action( 'init', array($this, 'set_form_cookie'));
         }
@@ -121,7 +120,7 @@ class contact_form extends WP_Widget {
 
 		if ( !is_email($email) ) {
 			$form = '<div style="border: solid 1px red; background: #ffeeee; color: #cc0000; font-weight: bold; padding: 10px;">'
-			. __('Please configure this contact form under Appearence / Widgets', 'contact-form')
+			. __('Please configure this contact form under Appearance / Widgets', 'contact-form')
 			. '</div>' . "\n";
 		} elseif ( isset($_POST['cf_number']) && intval($_POST['cf_number']) == $number
 			&& $GLOBALS['cf_status'][intval($_POST['cf_number'])] == 'success'
@@ -130,7 +129,7 @@ class contact_form extends WP_Widget {
 				. wpautop($captions['success_message'])
 				. '</div>' . "\n";
 		} else {
-			$form = '<form method="post" action="" class="form_event">' . "\n"
+			$form = '<form method="post" action="" class="form_event sem_contact_form">' . "\n"
 				. '<input type="hidden" class="event_label" value="' . esc_attr(sprintf(__('Contact: %s', 'contact-form'), sanitize_title(preg_replace("/@.+/", '', $email)))) . '" />' . "\n"
 				. '<input type="hidden" name="cf_number" value="' . intval($number) . '" />' . "\n";
 
@@ -514,12 +513,14 @@ class contact_form extends WP_Widget {
 						$ok = false;
 						$status = 'invalid_email';
 					}
+					break;
 				case 'name':
 					if ( urldecode($$var) != $$var )
 						$ok = false;
 					foreach ( array("\r", "\n", ":", "%") as $kvetch )
 						if ( strpos($$var, $kvetch) !== false )
 							$ok = false;
+					break;
 				default:
 					if ( $$var === '' ) {
 						$ok = false;
@@ -555,6 +556,7 @@ class contact_form extends WP_Widget {
 
 			# comment spam filters can now filter this the usual way with an appropriate method
 			$args = apply_filters('contact_form_validate', $args);
+			$ok = $args['ok'];
 		}
 
 		if ( !$ok )
@@ -631,29 +633,27 @@ EOS;
 			$comment =& $args['comment'];
 
 		# pass posted message through akismet
-		if ( function_exists('akismet_auto_check_comment') && get_option('wordpress_api_key') ) {
-			global $akismet_api_host, $akismet_api_port;
+		global $akismet_api_host, $akismet_api_port;
 
-			$comment['user_ip'] = preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] );
-			$comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-			$comment['referrer'] = $_SERVER['HTTP_REFERER'];
-			$comment['blog'] = user_trailingslashit(get_option('home'));
+		$comment['user_ip'] = preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] );
+		$comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+		$comment['referrer'] = $_SERVER['HTTP_REFERER'];
+		$comment['blog'] = user_trailingslashit(get_option('home'));
 
-			$ignore = array( 'HTTP_COOKIE' );
+		$ignore = array( 'HTTP_COOKIE' );
 
-			foreach ( $_SERVER as $key => $value )
-				if ( !in_array( $key, $ignore ) )
-					$comment["$key"] = $value;
+		foreach ( $_SERVER as $key => $value )
+			if ( !in_array( $key, $ignore ) )
+				$comment["$key"] = $value;
 
-			$query_string = '';
-			foreach ( $comment as $key => $data )
-				$query_string .= $key . '=' . urlencode( stripslashes($data) ) . '&';
+		$query_string = '';
+		foreach ( $comment as $key => $data )
+			$query_string .= $key . '=' . urlencode( stripslashes($data) ) . '&';
 
-			$response = akismet_http_post($query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port);
+		$response = akismet_http_post($query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port);
 
-			if ( 'true' == $response[1] )
-				$args['ok'] = false;
-		}
+		if ( 'true' == $response[1] )
+			$args['ok'] = false;
 
 		return $args;
 	} # akismet()
@@ -803,3 +803,6 @@ EOS;
 } # contact_form
 
 $contact_form = new contact_form();
+
+if ( $_POST )
+	add_action('init', array('contact_form', 'send_message'), 15);
