@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.4
+Version: 2.5 dev
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -20,9 +20,6 @@ This software is copyright Denis de Bernardy & Mike Koepke, and is distributed u
 **/
 
 
-load_plugin_textdomain('contact-form', false, dirname(plugin_basename(__FILE__)) . '/lang');
-
-
 /**
  * contact_form
  *
@@ -30,23 +27,73 @@ load_plugin_textdomain('contact-form', false, dirname(plugin_basename(__FILE__))
  **/
 
 class contact_form extends WP_Widget {
-    /**
-     * contact_form()
-     */
+	/**
+	 * Plugin instance.
+	 *
+	 * @see get_instance()
+	 * @type object
+	 */
+	protected static $instance = NULL;
+
+	/**
+	 * URL to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_url = '';
+
+	/**
+	 * Path to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_path = '';
+
+	/**
+	 * Access this plugin’s working instance
+	 *
+	 * @wp-hook plugins_loaded
+	 * @return  object of this class
+	 */
+	public static function get_instance()
+	{
+		NULL === self::$instance and self::$instance = new self;
+
+		return self::$instance;
+	}
+
+
+	/**
+	 * Loads translation file.
+	 *
+	 * Accessible to other classes to load different language files (admin and
+	 * front-end for example).
+	 *
+	 * @wp-hook init
+	 * @param   string $domain
+	 * @return  void
+	 */
+	public function load_language( $domain )
+	{
+		load_plugin_textdomain(
+			$domain,
+			FALSE,
+			$this->plugin_path . 'lang'
+		);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 *
+	 */
+
 	public function __construct() {
-        if ( !is_admin() ) {
+		$this->plugin_url    = plugins_url( '/', __FILE__ );
+		$this->plugin_path   = plugin_dir_path( __FILE__ );
+		$this->load_language( 'contact-form' );
 
-        	add_action('wp_print_styles', array($this, 'add_css'));
-        	add_action('wp_head', array($this, 'hashcash'), 20);
-
-	        if ( function_exists('akismet_auto_check_comment') && (get_option('wordpress_api_key') !== false) )
-        	    add_filter('contact_form_validate', array($this, 'akismet'));
-
-        	add_action( 'init', array($this, 'set_form_cookie'));
-        }
-
-        add_action('widgets_init', array($this, 'widgets_init'));
-        add_action('plugins_loaded', array($this, 'fix_hashcash'));
+		add_action( 'plugins_loaded', array ( $this, 'init' ) );
 
         $widget_ops = array(
       			'classname' => 'contact_form',
@@ -56,15 +103,15 @@ class contact_form extends WP_Widget {
       			'width' => 500,
       			);
 
-      		$this->init();
-      		$this->WP_Widget('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
+
+        $this->WP_Widget('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
     } #contact_form
 
-    /**
-	 * init()
-	 *
-	 * @return void
-	 **/
+	/**
+	* init()
+	*
+	* @return void
+	**/
 
 	function init() {
 		if ( get_option('widget_contact_form') === false ) {
@@ -78,8 +125,27 @@ class contact_form extends WP_Widget {
 				}
 			}
 		}
-	} # init()
 
+				// more stuff: register actions and filters
+		if ( !is_admin() ) {
+
+		    add_action('wp_print_styles', array($this, 'add_css'));
+		    add_action('wp_head', array($this, 'hashcash'), 20);
+
+		    if ( function_exists('akismet_auto_check_comment') && (get_option('wordpress_api_key') !== false) )
+		        add_filter('contact_form_validate', array($this, 'akismet'));
+
+		    add_action( 'init', array($this, 'set_form_cookie'));
+	    }
+
+	    add_action('widgets_init', array($this, 'widgets_init'));
+
+	    $this->fix_hashcash();
+
+
+		if ( $_POST )
+			add_action('init', array($this, 'send_message'), 15);
+	} # init()
 
 	/**
 	 * widgets_init()
@@ -802,7 +868,4 @@ EOS;
 	} # set_form_cookie
 } # contact_form
 
-$contact_form = new contact_form();
-
-if ( $_POST )
-	add_action('init', array('contact_form', 'send_message'), 15);
+$contact_form = contact_form::get_instance();

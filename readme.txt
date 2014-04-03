@@ -66,6 +66,10 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 2.5 =
+
+- Code refactoring
+
 = 2.4 =
 
 - Fix duplicate emails being sent that got introduced in 2.3
