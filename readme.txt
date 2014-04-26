@@ -3,7 +3,7 @@ Contributors: Denis-de-Bernardy, Mike_Koepke
 Donate link: http://www.semiologic.com/partners/
 Tags: semiologic
 Requires at least: 3.1
-Tested up to: 3.8
+Tested up to: 3.9
 Stable tag: trunk
 
 A widget-driven contact form.
@@ -69,6 +69,8 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 = 2.5 =
 
 - Code refactoring
+- WP 3.9 compat
+- CSS tweak for responsive
 
 = 2.4 =
 

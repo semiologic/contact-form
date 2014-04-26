@@ -1,6 +1,6 @@
 #main div.contact_form,
 #content div.contact_form {
-	width: 360px;
+	max-width: 360px;
 	margin: 0px auto;
 }
 
