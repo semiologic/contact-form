@@ -66,6 +66,10 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 2.5.1 =
+
+- Minor code tweak queue css
+
 = 2.5 =
 
 - Code refactoring
