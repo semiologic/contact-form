@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.5.1
+Version: 2.5.2
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -536,7 +536,7 @@ class contact_form extends WP_Widget {
 			if ( isset($_POST['cf_cc']) && $_POST['cf_cc'] )
 				wp_mail($email, $subject, $message, $headers);
 
-            $autorespond_message = $options['captions']['autorespond_message'];
+            $autorespond_message = isset( $options['captions']['autorespond_message'] ) ? $options['captions']['autorespond_message'] : '';
             if (!empty($autorespond_message)) {
 
                 $sitename = $options['name'];
