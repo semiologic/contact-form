@@ -56,7 +56,7 @@ To fight increasingly common contact form spam, the plugin integrates with WP-Ha
 
 Yahoo, AOL, Google and others have begun to implement [DMARC](http://www.dmarc.org/) to further combat spam.   Basically is the sender's email domain does not match the sender's email server, the receiver email server wil query the email domain and ask what to do with this unauthenticated message.  Stricter enforcement has it being discarded as spam.
 
-The contact for now has the user's entered email address being set in the Reply-To email header.  The From address will now be default sender address for the domain.   The is the option in widget setup to specify this From address.  It should be an address on the domain and NOT the same address as the Email to: address.
+The contact for now has the user's entered email address being set in the Reply-To email header.  The From address will now be default sender address for the domain wordpress@domain.com).
 
 = Help Me! =
 
@@ -74,6 +74,7 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 = 2.6 =
 
 - Support [DMARC](http://www.dmarc.org/) email messages.
+- HTML special characters, like &amp;, used in the site's name  and will be converted to normal text version (&) in the message body.
 
 = 2.5.2 =
 
