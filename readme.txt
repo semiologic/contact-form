@@ -52,6 +52,11 @@ Combining this plugin with the Google Analytics (GA) plugin adds an interesting 
 
 To fight increasingly common contact form spam, the plugin integrates with WP-Hashcash and Akismet. Both of these do an excellent job at fighting spam. (The first is slightly more efficient, and free.)
 
+= DMARC Support =
+
+Yahoo, AOL, Google and others have begun to implement [DMARC](http://www.dmarc.org/) to further combat spam.   Basically is the sender's email domain does not match the sender's email server, the receiver email server wil query the email domain and ask what to do with this unauthenticated message.  Stricter enforcement has it being discarded as spam.
+
+The contact for now has the user's entered email address being set in the Reply-To email header.  The From address will now be default sender address for the domain.   The is the option in widget setup to specify this From address.  It should be an address on the domain and NOT the same address as the Email to: address.
 
 = Help Me! =
 
@@ -65,6 +70,10 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 
 == Change Log ==
+
+= 2.6 =
+
+- Support [DMARC](http://www.dmarc.org/) email messages.
 
 = 2.5.2 =
 

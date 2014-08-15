@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.5.2
+Version: 2.6 dev
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -313,6 +313,7 @@ class contact_form extends WP_Widget {
 	function update($new_instance, $old_instance) {
 		$title = trim($new_instance['title']);
 		$email = trim($new_instance['email']);
+		$email_from = trim($new_instance['email_from']);
         $name = trim($new_instance['name']);
 
 		if ( !is_email($email) )
@@ -329,7 +330,7 @@ class contact_form extends WP_Widget {
 				$captions[$var] = $new_instance['captions'][$var];
 		}
 
-		return compact('title', 'email', 'name', 'captions');
+		return compact('title', 'email', 'name', 'captions', 'email_from');
 	} # update()
 
 
@@ -365,12 +366,24 @@ class contact_form extends WP_Widget {
 
 		echo '<tr valign="top">' . "\n"
 			. '<th scope="row" style="width: 100px;">'
-			. __('Your Email', 'contact-form')
+			. __('Email To', 'contact-form')
 			. '</th>' . "\n"
 			. '<td>'
 			.'<input type="text" size="20" class="widefat"'
 				. ' name="' . $this->get_field_name('email') . '"'
 				. ' value="' . esc_attr($email) . '"'
+				. ' />'
+			. '</td>' . "\n"
+			. '</tr>' . "\n";
+
+		echo '<tr valign="top">' . "\n"
+			. '<th scope="row" style="width: 100px;">'
+			. __('Email From', 'contact-form')
+			. '</th>' . "\n"
+			. '<td>'
+			.'<input type="text" size="20" class="widefat"'
+				. ' name="' . $this->get_field_name('email_from') . '"'
+				. ' value="' . esc_attr($email_from) . '"'
 				. ' />'
 			. '</td>' . "\n"
 			. '</tr>' . "\n";
@@ -516,10 +529,15 @@ class contact_form extends WP_Widget {
 			if ( !is_email($to) )
 				return;
 
+			$email_from = ( isset($options['email_from'] ) ? $options['email_from'] : '' );
+
 			foreach ( array('name', 'email', 'phone', 'subject', 'message') as $var )
 				$$var = strip_tags(stripslashes($_POST['cf_' . $var]));
 
-			$headers = 'From: "' . $name . '" <' . $email . '>';
+			$headers = 'Reply-To: "' . $name . '" <' . $email . '>';
+			if ( $email_from != '' ) {
+				$headers .= 'Return-path: <' . $email_from . '>';
+			}
 
 			$message = __('Site:', 'contact-form') . ' ' . get_option('blogname') . "\n"
 				. __('From:', 'contact-form') . ' ' . $name . "\n"
