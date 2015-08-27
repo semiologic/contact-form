@@ -1,9 +1,9 @@
 === Contact Form ===
 Contributors: Denis-de-Bernardy, Mike_Koepke
-Donate link: http://www.semiologic.com/partners/
+Donate link: https://www.semiologic.com
 Tags: semiologic
 Requires at least: 3.1
-Tested up to: 4.0
+Tested up to: 4.3
 Stable tag: trunk
 
 A widget-driven contact form.
@@ -31,7 +31,7 @@ Common places to insert a form automatically include:
 - To the top/middle right of your site in a wide sidebar. Users commonly swipe their mouse to the top right corner of their screen, and eyeballs generally look for it in that area once they're done reading.
 - After all posts ("After The Entries" panel.)
 
-= Embedding a contact form in a static page =
+= Embedding a contact form in a static page (with Semiologic Pro) =
 
 As much as a form is nice in a large sidebar, you'll usually want it in a static page:
 
@@ -46,7 +46,7 @@ If text is entered in the Auto Responder field of the widget, the form will send
 
 = Google Analytics integration =
 
-Combining this plugin with the Google Analytics (GA) plugin adds an interesting bonus. Specifically, contact form usage gets tracked as page events.
+Combining this plugin with the Semiologic Google Analytics (GA) plugin adds an interesting bonus. Specifically, contact form usage gets tracked as page events.
 
 = WP-Hashcash and Akismet integration =
 
@@ -56,11 +56,11 @@ To fight increasingly common contact form spam, the plugin integrates with WP-Ha
 
 Yahoo, AOL, Google and others have begun to implement [DMARC](http://www.dmarc.org/) to further combat spam.   Basically is the sender's email domain does not match the sender's email server, the receiver email server wil query the email domain and ask what to do with this unauthenticated message.  Stricter enforcement has it being discarded as spam.
 
-The contact for now has the user's entered email address being set in the Reply-To email header.  The From address will now be default sender address for the domain wordpress@domain.com).
+The contact form now has the user's entered email address being set in the Reply-To email header.  The From address will now be default sender address for the domain wordpress@yourdomain.com).
 
 = Help Me! =
 
-The [Semiologic forum](http://forum.semiologic.com) is the best place to report issues.
+The [Semiologic Support Page](https://www.semiologic.com/support/) is the best place to report issues.
 
 
 == Installation ==
@@ -70,6 +70,17 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 
 == Change Log ==
+
+= 3.0 =
+
+- New configuration option to show the Captions (Your Name, Your Email, ...) as the input field defaults as opposed to over fields
+- The Name shown as the sender will now be the user's entered name.   wordpress@yourdomain.com will continue to be actual email address per dmarc needs.
+- Removed empty action="" from <form....   that was getting flagged in W3C validator
+- Use akismet php class to check comment for spam depending on akismet version used
+- Cosmetic tweaks (spacing, text centering) to email sent or failure message
+- Updated to use PHP5 constructors as WP deprecated PHP4 constructor type in 4.3.
+- WP 4.3 compat
+- Tested against PHP 5.6
 
 = 2.7 =
 

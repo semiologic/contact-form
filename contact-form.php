@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 2.7
+Version: 3.0
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: contact-form
@@ -104,7 +104,7 @@ class contact_form extends WP_Widget {
       			);
 
 
-        $this->WP_Widget('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
+		parent::__construct('contact_form', __('Contact Form', 'contact-form'), $widget_ops, $control_ops);
     } #contact_form
 
 	/**
@@ -195,7 +195,7 @@ class contact_form extends WP_Widget {
 				. wpautop($captions['success_message'])
 				. '</div>' . "\n";
 		} else {
-			$form = '<form method="post" action="" class="form_event sem_contact_form">' . "\n"
+			$form = '<form method="post" class="form_event sem_contact_form">' . "\n"
 				. '<input type="hidden" class="event_label" value="' . esc_attr(sprintf(__('Contact: %s', 'contact-form'), sanitize_title(preg_replace("/@.+/", '', $email)))) . '" />' . "\n"
 				. '<input type="hidden" name="cf_number" value="' . intval($number) . '" />' . "\n";
 
@@ -227,12 +227,12 @@ class contact_form extends WP_Widget {
 				case 'subject':
 					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
 						. '<label>'
-						. $captions[$var] . '<br />' . "\n"
+						. (!$combine_labels_fields ? $captions[$var] . '<br />' . "\n" : '')
 						. '<input type="text" class="cf_field"'
 							. ' name="cf_' . $var . '"'
 							. ' value="' . (isset($_POST['cf_' . $var])
-                                ? esc_attr(stripslashes($_POST['cf_' . $var]))
-                                : '')
+                                ? esc_attr( stripslashes($_POST['cf_' . $var]) )
+                                : ($combine_labels_fields ? $captions[$var] : '' ) )
                                 . '"'
 							. ' />'
 						. '</label>'
@@ -241,13 +241,13 @@ class contact_form extends WP_Widget {
 				case 'message':
 					$form .= '<div class="cf_field cf_' . $var . '">' . "\n"
 						. '<label>'
-						. $captions[$var] . '<br />' . "\n"
+						. (!$combine_labels_fields ? $captions[$var] . '<br />' . "\n" : '')
 						. '<textarea cols="40" rows="20" class="cf_field"'
 							. ' name="cf_' . $var . '"'
 							. ' >'
 						. (isset($_POST['cf_' . $var])
                             ? esc_attr(stripslashes($_POST['cf_' . $var]))
-                            : '')
+                            : ($combine_labels_fields ? $captions[$var] : '' ) )
 						. '</textarea>'
 						. '</label>'
 						. '</div>' . "\n";
@@ -329,7 +329,9 @@ class contact_form extends WP_Widget {
 				$captions[$var] = $new_instance['captions'][$var];
 		}
 
-		return compact('title', 'email', 'name', 'captions');
+		$combine_labels_fields = isset($new_instance['combine_labels_fields']);
+
+		return compact('title', 'email', 'name', 'captions', 'combine_labels_fields');
 	} # update()
 
 
@@ -386,6 +388,23 @@ class contact_form extends WP_Widget {
      				. ' />'
      			. '</td>' . "\n"
      			. '</tr>' . "\n";
+
+		echo '<tr valign="top">' . "\n"
+			. '<th scope="row" style="width: 100px;">'
+			. '</th>' . "\n"
+			. '<td style="line-height: 3.0;">'
+			. '<label>'
+			. '<input type="checkbox" name="' . $this->get_field_name('combine_labels_fields') . '"'
+				. ( $combine_labels_fields
+					? ' checked="checked"'
+					: ''
+					)
+				. ' />'
+			. '&nbsp;'
+			. __('Display field captions as input field defaults', 'contact-form')
+			. '</label>'
+			. '</td>' . "\n"
+			. '</tr>' . "\n";
 
 		echo '</table>' . "\n";
 
@@ -454,7 +473,8 @@ class contact_form extends WP_Widget {
 				'required_field' => __('Please fill in all of the required fields.', 'contact-form'),
 				'spam_caught' => __('Sorry... Your message has been caught as spam and was not sent.', 'contact-form'),
                 'autorespond_message' => __('', 'contact-form'),
-				)
+				),
+			'combine_labels_fields' => false,
 			);
 	} # defaults()
 
@@ -493,7 +513,7 @@ class contact_form extends WP_Widget {
 		$folder = plugin_dir_url(__FILE__);
 		$css = $folder . 'css/contact-form.css';
 
-		wp_enqueue_style('contact_form', $css, null, '20090903');
+		wp_enqueue_style('contact_form', $css, null, '20150827');
 	} # add_css()
 
 
@@ -516,10 +536,20 @@ class contact_form extends WP_Widget {
 			if ( !is_email($to) )
 				return;
 
+			// set the frome email address for dmarc needs
+			// Get the site domain and get rid of www.
+			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
+			if ( substr( $sitename, 0, 4 ) == 'www.' ) {
+				$sitename = substr( $sitename, 4 );
+			}
+
+			$from_email = 'wordpress@' . $sitename;
+
 			foreach ( array('name', 'email', 'phone', 'subject', 'message') as $var )
 				$$var = strip_tags(stripslashes($_POST['cf_' . $var]));
 
-			$headers = 'Reply-To: "' . $name . '" <' . $email . '>';
+			$headers[] = 'From: "' . $name . '" <' . $from_email . '>';
+			$headers[] = 'Reply-To: "' . $name . '" <' . $email . '>';
 
 			$message = __('Site:', 'contact-form') . ' ' . htmlspecialchars_decode( get_option('blogname') ) . "\n"
 				. __('From:', 'contact-form') . ' ' . $name . "\n"
@@ -609,10 +639,10 @@ class contact_form extends WP_Widget {
 		if ( $ok ) {
 			# create a fake comment
 			$comment['comment_post_ID'] = intval($_POST['cf_number']);
-			$comment['comment_author'] = stripslashes($_POST['cf_name']);
-			$comment['comment_author_email'] = stripslashes($_POST['cf_email']);
+			$comment['comment_author'] = isset($_POST['cf_name']) ? stripslashes($_POST['cf_name']) : '';
+			$comment['comment_author_email'] = isset($_POST['cf_email']) ? stripslashes($_POST['cf_email']) : '';
 			$comment['comment_author_url'] = '';
-			$comment['comment_content'] = stripslashes($_POST['cf_message']);
+			$comment['comment_content'] = isset($_POST['cf_message']) ? stripslashes($_POST['cf_message']) : '';
 			$comment['comment_type'] = '';
 			$comment['user_ID'] = '';
 
@@ -701,10 +731,11 @@ EOS;
 		# pass posted message through akismet
 		global $akismet_api_host, $akismet_api_port;
 
+		$comment['comment_type'] = 'contact_form';
 		$comment['user_ip'] = preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] );
 		$comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 		$comment['referrer'] = $_SERVER['HTTP_REFERER'];
-		$comment['blog'] = user_trailingslashit(get_option('home'));
+		$comment['blog'] = get_option( 'home' );
 
 		$ignore = array( 'HTTP_COOKIE' );
 
@@ -712,13 +743,20 @@ EOS;
 			if ( !in_array( $key, $ignore ) )
 				$comment["$key"] = $value;
 
+		if ( !function_exists( 'akismet_http_post' ) && !defined( 'AKISMET_VERSION' ) )
+			return false;
+
 		$query_string = '';
-		foreach ( $comment as $key => $data )
-			$query_string .= $key . '=' . urlencode( stripslashes($data) ) . '&';
+		if ( is_array( $comment ) )
+			$query_string = http_build_query( $comment );
 
-		$response = akismet_http_post($query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port);
+		if ( method_exists( 'Akismet', 'http_post' ) ) {
+		    $response = Akismet::http_post( $query_string, 'comment-check' );
+		} else {
+		    $response = akismet_http_post( $query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port );
+		}
 
-		if ( 'true' == $response[1] )
+		if ( isset( $response[1] ) && 'true' == trim( $response[1] ) )
 			$args['ok'] = false;
 
 		return $args;

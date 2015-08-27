@@ -1,7 +1,7 @@
 #main div.contact_form,
 #content div.contact_form {
 	max-width: 360px;
-	margin: 0px auto;
+	margin: 0 auto;
 }
 
 .sidebar div.contact_form {
@@ -10,7 +10,7 @@
 
 div.cf_field {
 	text-align: left;
-	margin: .5em 0px;
+	margin: .5em 0;
 }
 
 div.cf_send {
@@ -28,8 +28,8 @@ textarea.cf_field {
 }
 
 .sidebar .contact_form /* = sidebar widget */ {
-	margin-left: 0px;
-	margin-right: 0px;
+	margin-left: 0;
+	margin-right: 0;
 }
 
 .sidebar textarea.cf_field {
@@ -41,6 +41,8 @@ textarea.cf_field {
 	background: #efe;
 	color: #282;
 	padding: 1em;
+	margin: 1em 0;
+	text-align: center;
 }
 
 .cf_error {
@@ -48,4 +50,11 @@ textarea.cf_field {
 	background: #fee;
 	color: #b11;
 	padding: 1em;
+	margin: 1em 0;
+	text-align: center;
+}
+
+.cf_success p,
+.cf_error p {
+	margin: 0;
 }
