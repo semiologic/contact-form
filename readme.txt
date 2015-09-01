@@ -1,6 +1,6 @@
 === Contact Form ===
 Contributors: Denis-de-Bernardy, Mike_Koepke
-Donate link: https://www.semiologic.com
+Donate link: https://www.semiologic.com/donate/
 Tags: semiologic
 Requires at least: 3.1
 Tested up to: 4.3
