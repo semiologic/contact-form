@@ -3,7 +3,7 @@ Contributors: Denis-de-Bernardy, Mike_Koepke
 Donate link: https://www.semiologic.com/donate/
 Tags: semiologic
 Requires at least: 3.1
-Tested up to: 4.3
+Tested up to: 4.4
 Stable tag: trunk
 
 A widget-driven contact form.
@@ -71,6 +71,10 @@ The [Semiologic Support Page](https://www.semiologic.com/support/) is the best p
 
 == Change Log ==
 
+= 3.1 =
+
+- Captions shown in fields are now cleared upon user input
+ 
 = 3.0 =
 
 - New configuration option to show the Captions (Your Name, Your Email, ...) as the input field defaults as opposed to over fields

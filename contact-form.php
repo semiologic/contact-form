@@ -3,7 +3,7 @@
 Plugin Name: Contact Form
 Plugin URI: http://www.semiologic.com/software/contact-form/
 Description: Contact form widgets for WordPress, with WP Hashcash and akismet integration to fight contact form spam. Use the Inline Widgets plugin to insert contact forms into your posts and pages.
-Version: 3.0
+Version: 3.1
 Author: Denis de Bernardy & Mike Koepke
 Author URI: https://www.semiologic.com
 Text Domain: contact-form
@@ -232,8 +232,10 @@ class contact_form extends WP_Widget {
 							. ' name="cf_' . $var . '"'
 							. ' value="' . (isset($_POST['cf_' . $var])
                                 ? esc_attr( stripslashes($_POST['cf_' . $var]) )
-                                : ($combine_labels_fields ? $captions[$var] : '' ) )
+                                : '' )
                                 . '"'
+					         . ($combine_labels_fields && !isset($_POST['cf_' . $var]) ?
+								'placeholder="' .  $captions[$var] . '"' : '' )
 							. ' />'
 						. '</label>'
 						. '</div>' . "\n";
@@ -244,10 +246,12 @@ class contact_form extends WP_Widget {
 						. (!$combine_labels_fields ? $captions[$var] . '<br />' . "\n" : '')
 						. '<textarea cols="40" rows="20" class="cf_field"'
 							. ' name="cf_' . $var . '"'
+					         . ($combine_labels_fields && !isset($_POST['cf_' . $var]) ?
+								' placeholder="' .  $captions[$var] . '"' : '' )
 							. ' >'
 						. (isset($_POST['cf_' . $var])
-                            ? esc_attr(stripslashes($_POST['cf_' . $var]))
-                            : ($combine_labels_fields ? $captions[$var] : '' ) )
+							? esc_attr( stripslashes($_POST['cf_' . $var]) )
+                            : '' )
 						. '</textarea>'
 						. '</label>'
 						. '</div>' . "\n";
